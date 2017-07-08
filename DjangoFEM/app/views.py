@@ -6,6 +6,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from app.forms import NodeForm, ElementForm
 from app.models import Node, Element, Calculator
 from django.http import HttpRequest
+from django.template import RequestContext
 from datetime import datetime
 
 def home(request):
@@ -16,16 +17,17 @@ def home(request):
     if request.method == "POST":
         nodeForm = NodeForm(request.POST)
         elementForm = ElementForm(request.POST)
-        if request.POST.get('node') != None and nodeForm.is_valid():
+        if nodeForm.is_valid():
             item = nodeForm.save(commit=False)
             item.author = request.user
             item.save()
-        elif request.POST.get('element') != None and elementForm.is_valid():
+        if elementForm.is_valid():
             item = elementForm.save(commit=False)
             item.author = request.user
             item.save()
-        #elif request.POST.get('refresh') != None:
-        #    value = Calculator().run()
+    else:
+        nodeForm = NodeForm()
+        elementForm = ElementForm()
 
     #entries
     if request.user.is_authenticated:
@@ -35,6 +37,9 @@ def home(request):
         nodes = None
         elements = None
 
+    #calculate
+    Calculator().run()
+
     #response
     return render(request, 'app/index.html', 
         {
@@ -42,9 +47,8 @@ def home(request):
             'year' :datetime.now().year,
             'nodes':nodes,
             'elements':elements,
-            'nodeForm':NodeForm(),
-            'elementForm':ElementForm(),
-            'value':Calculator().run()
+            'nodeForm':nodeForm,
+            'elementForm':elementForm,
         })
 
 def node_delete(request, pk):
