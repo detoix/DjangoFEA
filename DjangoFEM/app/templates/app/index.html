@@ -5,8 +5,48 @@
 <div class="jumbotron">
     <h1>Django</h1>
     <p class="lead">Django is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://www.djangoproject.com/" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+    <p><a href="{% url 'home' %}" class="btn btn-primary btn-large">Update View &raquo;</a></p>
+    <form method="POST">{% csrf_token %}
+        <button type="submit" class="btn btn-primary btn-large">Refresh</button>
+    </form>
 </div>
+
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Nodes</h2>
+        {% for node in nodes %}
+        <div class="post">
+            <p>{{ node.x_coord|linebreaksbr }}</p>
+            <a href="{% url 'node_delete' pk=node.pk %}">Delete</a>
+        </div>
+        {% endfor %}
+        <form method="POST" class="post-form">{% csrf_token %}
+            {{ nodeForm.as_p }}
+            <button type="submit" class="save btn btn-default">Add node</button>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <h2>Elements</h2>
+        {% for element in elements %}
+        <div class="post">
+            <p>{{ element.node_start|linebreaksbr }}</p>
+            <a href="{% url 'element_delete' pk=element.pk %}">Delete</a>
+        </div>
+        {% endfor %}
+        <form method="POST" class="post-form">{% csrf_token %}
+            {{ elementForm.as_p }}
+            <button type="submit" class="save btn btn-default">Add element</button>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <h2>Loads</h2>
+        <p>You can easily publish to Microsoft Azure using Visual Studio. Find out how you can host your application using a free trial today.</p>
+        <p><a class="btn btn-default" href="http://azure.microsoft.com">Learn more &raquo;</a></p>
+    </div>
+</div>
+
+
 
 <div class="row">
     <div class="col-md-4">

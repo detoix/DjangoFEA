@@ -2,7 +2,9 @@
 Definition of views.
 """
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
+from app.forms import NodeForm, ElementForm
+from app.models import Node, Element, Calculator
 from django.http import HttpRequest
 from django.template import RequestContext
 from datetime import datetime
@@ -10,14 +12,52 @@ from datetime import datetime
 def home(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
-    return render(
-        request,
-        'app/index.html',
+
+    #form
+    if request.method == "POST":
+        nodeForm = NodeForm(request.POST)
+        elementForm = ElementForm(request.POST)
+        if nodeForm.is_valid():
+            item = nodeForm.save(commit=False)
+            item.author = request.user
+            item.save()
+        if elementForm.is_valid():
+            item = elementForm.save(commit=False)
+            item.author = request.user
+            item.save()
+    else:
+        nodeForm = NodeForm()
+        elementForm = ElementForm()
+
+    #entries
+    if request.user.is_authenticated:
+        nodes = Node.objects.filter(author=request.user).order_by('created_date')
+        elements = Element.objects.filter(author=request.user).order_by('created_date')
+    else:
+        nodes = None
+        elements = None
+
+    #calculate
+    Calculator().run()
+
+    #response
+    return render(request, 'app/index.html', 
         {
             'title':'Home Page',
-            'year':datetime.now().year,
-        }
-    )
+            'year' :datetime.now().year,
+            'nodes':nodes,
+            'elements':elements,
+            'nodeForm':nodeForm,
+            'elementForm':elementForm,
+        })
+
+def node_delete(request, pk):
+    get_object_or_404(Node, pk=pk).delete()
+    return redirect('/')
+
+def element_delete(request, pk):
+    get_object_or_404(Element, pk=pk).delete()
+    return redirect('/')
 
 def contact(request):
     """Renders the contact page."""

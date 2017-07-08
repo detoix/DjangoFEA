@@ -6252,3 +6252,67 @@ System.FormatException: Input string was not in a correct format.
 2017-07-08T06:53:10: Saving group "c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\pytz"
 2017-07-08T06:53:10: End of group "c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\pytz"
 2017-07-08T06:53:13: Deleting 0 files
+
+2017-07-08T11:11:48: Start analysis
+2017-07-08T11:11:50: IncludeModulesFromModulePath = win32com
+2017-07-08T11:12:05: Deleting 0 files
+2017-07-08T11:12:05: astropy.CallDepth = 0
+2017-07-08T11:12:05: delphixpy.CallDepth = 0
+2017-07-08T11:12:05: matplotlib.CallDepth = 3
+2017-07-08T11:12:05: pandas.CallDepth = 0
+2017-07-08T11:12:05: sympy.CallDepth = 0
+2017-07-08T11:12:05: Start group "c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\djenum" with 1 files
+2017-07-08T11:12:07: Parsing "djenum" ("c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\djenum\__init__.py")
+2017-07-08T11:12:08: Parsing complete
+2017-07-08T11:12:08: Analyzing "djenum"
+2017-07-08T11:12:08: Starting analysis of 1 modules
+2017-07-08T11:12:12: Analysis complete
+2017-07-08T11:12:12: Saving group "c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\djenum"
+2017-07-08T11:12:12: End of group "c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\djenum"
+2017-07-08T11:12:20: Deleting 0 files
+2017-07-08T11:12:20: astropy.CallDepth = 0
+2017-07-08T11:12:20: delphixpy.CallDepth = 0
+2017-07-08T11:12:20: matplotlib.CallDepth = 3
+2017-07-08T11:12:20: pandas.CallDepth = 0
+2017-07-08T11:12:20: sympy.CallDepth = 0
+2017-07-08T11:12:20: Start group "c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\django_enumfield" with 7 files
+2017-07-08T11:12:21: Parsing "django_enumfield.enum" ("c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\django_enumfield\enum.py")
+2017-07-08T11:12:21: Parsing "django_enumfield.exceptions" ("c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\django_enumfield\exceptions.py")
+2017-07-08T11:12:21: Parsing "django_enumfield.models" ("c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\django_enumfield\models.py")
+2017-07-08T11:12:21: Parsing "django_enumfield.validators" ("c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\django_enumfield\validators.py")
+2017-07-08T11:12:21: Parsing "django_enumfield" ("c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\django_enumfield\__init__.py")
+2017-07-08T11:12:21: Parsing "django_enumfield.db.fields" ("c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\django_enumfield\db\fields.py")
+2017-07-08T11:12:21: Parsing "django_enumfield.db" ("c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\django_enumfield\db\__init__.py")
+2017-07-08T11:12:21: Parsing complete
+2017-07-08T11:12:21: Analyzing "django_enumfield.enum"
+2017-07-08T11:12:21: Analyzing "django_enumfield.exceptions"
+2017-07-08T11:12:21: Analyzing "django_enumfield.models"
+2017-07-08T11:12:21: Analyzing "django_enumfield.validators"
+2017-07-08T11:12:21: Analyzing "django_enumfield"
+2017-07-08T11:12:21: Analyzing "django_enumfield.db.fields"
+2017-07-08T11:12:21: Analyzing "django_enumfield.db"
+2017-07-08T11:12:21: Starting analysis of 7 modules
+2017-07-08T11:12:27: Analysis complete
+2017-07-08T11:12:27: Saving group "c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\django_enumfield"
+2017-07-08T11:12:27: End of group "c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\django_enumfield"
+2017-07-08T11:12:27: Start group "c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\django_enumfield" with 5 files
+2017-07-08T11:12:29: Parsing "django_enumfield.tests.models" ("c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\django_enumfield\tests\models.py")
+2017-07-08T11:12:29: Parsing "django_enumfield.tests.test_enum" ("c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\django_enumfield\tests\test_enum.py")
+2017-07-08T11:12:29: Parsing "django_enumfield.tests.test_settings" ("c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\django_enumfield\tests\test_settings.py")
+2017-07-08T11:12:29: Parsing "django_enumfield.tests.test_validators" ("c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\django_enumfield\tests\test_validators.py")
+2017-07-08T11:12:29: Parsing "django_enumfield.tests" ("c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\django_enumfield\tests\__init__.py")
+2017-07-08T11:12:29: Parsing complete
+2017-07-08T11:12:29: Analyzing "django_enumfield.tests.models"
+2017-07-08T11:12:29: Analyzing "django_enumfield.tests.test_enum"
+2017-07-08T11:12:29: Analyzing "django_enumfield.tests.test_settings"
+2017-07-08T11:12:29: Analyzing "django_enumfield.tests.test_validators"
+2017-07-08T11:12:29: Analyzing "django_enumfield.tests"
+2017-07-08T11:12:29: Starting analysis of 5 modules
+2017-07-08T11:12:34: Analysis complete
+2017-07-08T11:12:34: Saving group "c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\django_enumfield"
+2017-07-08T11:12:34: End of group "c:\users\kdeptula\documents\visual studio 2017\projects\djangofem\djangofem\django-env\lib\site-packages\django_enumfield"
+2017-07-08T11:12:41: Deleting 0 files
+
+2017-07-08T11:16:11: Start analysis
+2017-07-08T11:16:12: IncludeModulesFromModulePath = win32com
+2017-07-08T11:16:24: Deleting 13 files
