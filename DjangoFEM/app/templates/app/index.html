@@ -5,12 +5,11 @@
 <div class="jumbotron">
     <h1>Django</h1>
     <p class="lead">Django is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="{% url 'home' %}" class="btn btn-primary btn-large">Update View &raquo;</a></p>
+    <p><a href="{% url 'home' %}" class="btn btn-primary btn-large">{{ value }} &raquo;</a></p>
     <form method="POST">{% csrf_token %}
-        <button type="submit" class="btn btn-primary btn-large">Refresh</button>
+        <button type="submit" class="btn btn-primary btn-large" name="refresh">Refresh</button>
     </form>
 </div>
-
 
 <div class="row">
     <div class="col-md-4">
@@ -23,7 +22,7 @@
         {% endfor %}
         <form method="POST" class="post-form">{% csrf_token %}
             {{ nodeForm.as_p }}
-            <button type="submit" class="save btn btn-default">Add node</button>
+            <button type="submit" class="save btn btn-default" name="node">Add node</button>
         </form>
     </div>
     <div class="col-md-4">
@@ -36,7 +35,7 @@
         {% endfor %}
         <form method="POST" class="post-form">{% csrf_token %}
             {{ elementForm.as_p }}
-            <button type="submit" class="save btn btn-default">Add element</button>
+            <button type="submit" class="save btn btn-default" name="element">Add element</button>
         </form>
     </div>
     <div class="col-md-4">
@@ -45,8 +44,6 @@
         <p><a class="btn btn-default" href="http://azure.microsoft.com">Learn more &raquo;</a></p>
     </div>
 </div>
-
-
 
 <div class="row">
     <div class="col-md-4">
