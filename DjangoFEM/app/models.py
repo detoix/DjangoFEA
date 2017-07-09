@@ -53,10 +53,13 @@ class Element(DataItem):
     A = models.FloatField()
     J = models.FloatField()
     ro = models.FloatField()
-    node_start = models.OneToOneField(Node, null=True, related_name="node_start")
-    node_end = models.OneToOneField(Node, null=True, related_name="node_end")
+    node_start = models.ForeignKey(Node, related_name="+")
+    node_end = models.ForeignKey(Node, related_name="+")
     hinge_start = models.BooleanField()
     hinge_end = models.BooleanField()
+
+    class Meta:
+        unique_together = ('node_start', 'node_end')
 
     #assembling stiffness matrix
     '''The function acts as follows:

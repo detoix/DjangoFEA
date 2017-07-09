@@ -44,7 +44,7 @@ def home(request):
             'elements':elements,
             'nodeForm':NodeForm(),
             'elementForm':ElementForm(),
-            'value':Calculator().run()
+            #'value':Calculator().run()
         })
 
 def node_delete(request, pk):
