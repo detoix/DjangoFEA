@@ -15,12 +15,12 @@
     <div class="col-md-4">
         <h2>Nodes</h2>
         {% for node in nodes %}
-        <div class="post">
+        <div class="post" id="nodes">
             <p>{{ node.x_coord|linebreaksbr }}</p>
             <a href="{% url 'node_delete' pk=node.pk %}">Delete</a>
         </div>
         {% endfor %}
-        <form method="POST" class="post-form">{% csrf_token %}
+        <form method="POST" class="post-form" id="node-form">{% csrf_token %}
             {{ nodeForm.as_p }}
             <button type="submit" class="save btn btn-default" name="node">Add node</button>
         </form>
@@ -28,7 +28,7 @@
     <div class="col-md-4">
         <h2>Elements</h2>
         {% for element in elements %}
-        <div class="post">
+        <div class="post" id="elements">
             <p>{{ element.node_start|linebreaksbr }}</p>
             <a href="{% url 'element_delete' pk=element.pk %}">Delete</a>
         </div>

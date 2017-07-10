@@ -53,8 +53,8 @@ class Element(DataItem):
     A = models.FloatField()
     J = models.FloatField()
     ro = models.FloatField()
-    node_start = models.ForeignKey(Node, related_name="+")
-    node_end = models.ForeignKey(Node, related_name="+")
+    node_start = models.ForeignKey(Node, on_delete=models.CASCADE, related_name="node_start")
+    node_end = models.ForeignKey(Node, on_delete=models.CASCADE, related_name="node_end")
     hinge_start = models.BooleanField()
     hinge_end = models.BooleanField()
 
@@ -215,7 +215,7 @@ class Element(DataItem):
         return pZeros
 
     def __str__(self):
-        return str(self.node_start.getpa)
+        return str(self.E)
 
 class Calculator():
     def __init__(self):
