@@ -16,7 +16,7 @@
         <h2>Nodes</h2>
         {% for node in nodes %}
         <div class="post" id="nodes">
-            <p>{{ node.x_coord|linebreaksbr }}</p>
+            <p>{{ node.x_coord }}</p>
             <a href="{% url 'node_delete' pk=node.pk %}">Delete</a>
         </div>
         {% endfor %}
@@ -29,7 +29,7 @@
         <h2>Elements</h2>
         {% for element in elements %}
         <div class="post" id="elements">
-            <p>{{ element.node_start|linebreaksbr }}</p>
+            <p>{{ element.node_start }}</p>
             <a href="{% url 'element_delete' pk=element.pk %}">Delete</a>
         </div>
         {% endfor %}
@@ -40,8 +40,16 @@
     </div>
     <div class="col-md-4">
         <h2>Loads</h2>
-        <p>You can easily publish to Microsoft Azure using Visual Studio. Find out how you can host your application using a free trial today.</p>
-        <p><a class="btn btn-default" href="http://azure.microsoft.com">Learn more &raquo;</a></p>
+        {% for load in loads %}
+        <div class="post" id="loads">
+            <p>{{ load.nature }}</p>
+            <a href="{% url 'load_delete' pk=load.pk %}">Delete</a>
+        </div>
+        {% endfor %}
+        <form method="POST" class="load-form">{% csrf_token %}
+            {{ loadForm.as_p }}
+            <button type="submit" class="save btn btn-default" name="load">Add load</button>
+        </form>
     </div>
 </div>
 

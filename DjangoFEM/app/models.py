@@ -217,6 +217,38 @@ class Element(DataItem):
     def __str__(self):
         return str(self.E)
 
+class Load(DataItem):
+    type = models.FloatField()
+    nature = models.FloatField()
+    group = models.IntegerField()
+    associated_element = models.ForeignKey(Element, on_delete=models.CASCADE, unique=False)
+    f1 = models.FloatField()
+    f2 = models.FloatField()
+    coord1 = models.FloatField()
+    coord2 = models.FloatField()
+    m = models.FloatField()
+    deg = models.FloatField()
+
+#class LoadFactory():
+#     def factory(type):
+#        if type == "Concentrated":
+#            return ConcentratedLoad()
+#        if type == "Distributed":
+#            return DistributedLoad()
+ 
+#class Load(DataItem):
+#    BaseElement = models.ForeignKey(Element, on_delete=models.CASCADE)
+
+#    class Meta:
+#        abstract = True
+
+#class ConcentratedLoad(Load):
+#    F = models.FloatField()
+
+#class DistributedLoad(Load):
+#    F1 = models.FloatField()
+#    F2 = models.FloatField()
+
 class Calculator():
     def __init__(self):
         self.nodes = Node.objects.all()
