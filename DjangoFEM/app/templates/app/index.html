@@ -16,7 +16,7 @@
         <h2>Nodes</h2>
         {% for node in nodes %}
         <div class="post" id="nodes">
-            <p>{{ node.x_coord }}</p>
+            <p>{{ node.x }}</p>
             <a href="{% url 'node_delete' pk=node.pk %}">Delete</a>
         </div>
         {% endfor %}
@@ -42,7 +42,7 @@
         <h2>Loads</h2>
         {% for load in loads %}
         <div class="post" id="loads">
-            <p>{{ load.nature }}</p>
+            <p>{{ load }}</p>
             <a href="{% url 'load_delete' pk=load.pk %}">Delete</a>
         </div>
         {% endfor %}

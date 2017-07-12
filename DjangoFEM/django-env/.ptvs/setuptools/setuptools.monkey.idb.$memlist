@@ -2,10 +2,12 @@ sys
 _patch_distribution_metadata_write_pkg_info
 setuptools
 types
+_get_mro
 _patch_distribution_metadata_write_pkg_file
 six
-functools
+platform
 patch_func
+inspect
 __all__
 patch_for_msvc_specialized_compiler
 patch_all
@@ -14,4 +16,4 @@ get_unpatched
 get_unpatched_class
 import_module
 get_unpatched_function
-platform
+functools

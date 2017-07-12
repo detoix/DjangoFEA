@@ -13,6 +13,7 @@ Group
 InvalidSpecifier
 UndefinedEnvironmentName
 InvalidMarker
+Op
 Forward
 os
 VARIABLE
@@ -30,8 +31,8 @@ ParseException
 _operators
 sys
 __all__
-MARKER_OP
 ALIASES
+MARKER_OP
 _get_env
 LPAREN
 MARKER_EXPR

@@ -22,7 +22,7 @@ urlpatterns = [
     #url(r'^element/(?P<pk>[0-9]+)/edit/$', app.views.element_edit, name='element_edit'),
     url(r'^node/(?P<pk>[0-9]+)/delete/$', app.views.node_delete, name='node_delete'),
     url(r'^element/(?P<pk>[0-9]+)/delete/$', app.views.element_delete, name='element_delete'),
-
+    url(r'^load/(?P<pk>[0-9]+)/delete/$', app.views.load_delete, name='load_delete'),
     url(r'^contact$', app.views.contact, name='contact'),
     url(r'^about', app.views.about, name='about'),
     url(r'^login/$',

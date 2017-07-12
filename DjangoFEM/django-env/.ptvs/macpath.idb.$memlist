@@ -11,7 +11,7 @@ S_IWRITE
 ImportError
 ST_UID
 realpath
-ST_ATIME
+S_IFWHT
 ST_INO
 BytesWarning
 S_IEXEC
@@ -33,7 +33,7 @@ FILE_ATTRIBUTE_SYSTEM
 len
 bytes
 UF_OPAQUE
-S_IXGRP
+S_IFREG
 curdir
 str
 lexists
@@ -75,7 +75,7 @@ isinstance
 isabs
 pardir
 S_ISGID
-S_IFWHT
+ST_ATIME
 isdir
 S_ISDOOR
 FILE_ATTRIBUTE_DEVICE
@@ -105,8 +105,8 @@ UF_IMMUTABLE
 S_IROTH
 splitext
 S_IWGRP
-S_IFREG
 S_ISPORT
+S_IXGRP
 S_IFIFO
 ST_MTIME
 abspath

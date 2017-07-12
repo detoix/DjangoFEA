@@ -2,7 +2,7 @@ MIN_ETINY
 __libmpdec_version__
 MockThreading
 FloatOperation
-Context
+ROUND_HALF_DOWN
 threading
 DivisionUndefined
 ROUND_CEILING
@@ -25,7 +25,7 @@ Rounded
 ROUND_05UP
 Clamped
 re
-ROUND_HALF_DOWN
+Context
 __doc__
 MAX_EMAX
 Underflow

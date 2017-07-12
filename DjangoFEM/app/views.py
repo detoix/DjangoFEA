@@ -3,8 +3,8 @@ Definition of views.
 """
 
 from django.shortcuts import render, get_object_or_404, redirect
-from app.forms import NodeForm, ElementForm, LoadForm
-from app.models import Node, Element, Load, Calculator
+from app.forms import NodeForm, ElementForm, LoadFormFactory, LoadForm
+from app.models import Node, Element, Load, ConcentratedLoad, DistributedLoad, DistributedXLoad, Calculator
 from django.http import HttpRequest
 from datetime import datetime
 
@@ -26,6 +26,7 @@ def home(request):
             item.author = request.user
             item.save()
         elif request.POST.get('load') != None and loadForm.is_valid():
+            loadForm = LoadFormFactory(request).make()
             item = loadForm.save(commit=False)
             item.author = request.user
             item.save()
@@ -37,6 +38,7 @@ def home(request):
         nodes = Node.objects.filter(author=request.user).order_by('created_date')
         elements = Element.objects.filter(author=request.user).order_by('created_date')
         loads = Load.objects.filter(author=request.user).order_by('created_date')
+        Calculator().calc()
     else:
         nodes = None
         elements = None

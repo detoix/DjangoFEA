@@ -9,8 +9,7 @@ working_set
 functools
 zipimport
 _is_unpacked_egg
-find_nothing
-msg
+FileMetadata
 empty_provider
 plistlib
 null_ns_handler
@@ -89,7 +88,7 @@ VersionConflict
 run_main
 PY_MAJOR
 textwrap
-FileMetadata
+find_nothing
 utime
 BINARY_DIST
 isdir
