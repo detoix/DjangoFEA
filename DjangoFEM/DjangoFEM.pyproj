@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\static\app\scripts\ajax.js" />
+    <Content Include="app\static\app\scripts\chart.js" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />

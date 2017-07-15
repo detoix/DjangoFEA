@@ -7,6 +7,7 @@ from app.forms import NodeForm, ElementForm, LoadFormFactory, LoadForm
 from app.models import Node, Element, Load, ConcentratedLoad, DistributedLoad, DistributedXLoad, Calculator
 from django.http import HttpRequest
 from datetime import datetime
+import json
 
 def home(request):
     """Renders the home page."""
@@ -55,6 +56,8 @@ def home(request):
             'nodeForm':NodeForm(),
             'elementForm':ElementForm(),
             'loadForm':LoadForm(),
+            'dates':[obj.y for obj in nodes],
+            'counts':[obj.x for obj in nodes],
             #'value':Calculator().run()
         })
 
