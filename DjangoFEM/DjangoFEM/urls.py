@@ -17,7 +17,6 @@ import app.views
 urlpatterns = [
     # Examples:
     url(r'^$', app.views.home, name='home'),
-
     #url(r'^node/(?P<pk>[0-9]+)/edit/$', app.views.node_edit, name='node_edit'),
     #url(r'^element/(?P<pk>[0-9]+)/edit/$', app.views.element_edit, name='element_edit'),
     url(r'^node/(?P<pk>[0-9]+)/delete/$', app.views.node_delete, name='node_delete'),
@@ -48,5 +47,5 @@ urlpatterns = [
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', include(admin.site.urls)),
 ]
