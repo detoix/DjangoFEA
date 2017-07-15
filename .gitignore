@@ -3,7 +3,6 @@
 
 # User-defined
 db.sqlite3
-[Mm]igrations/
 
 # User-specific files
 *.suo
