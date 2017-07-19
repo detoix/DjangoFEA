@@ -46,7 +46,7 @@ def home(request):
         elements = None
         loads = None
 
-    model = { 'data': [{ 'x': obj.x, 'y': obj.y} for obj in nodes], 'label': "Model" }
+    model = { 'data': [{ 'x': obj.x, 'y': obj.y} for obj in nodes], 'label': "Model4" }
 
     v1 = { 'x': -10, 'y': 0 };
     v2 = { 'x': 0, 'y': 10 };
