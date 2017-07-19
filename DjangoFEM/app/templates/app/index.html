@@ -3,12 +3,19 @@
 {% block content %}
 
 <script type="text/javascript">
-    var dates = {{ dates }};
-    var counts = {{ counts }};
+    window.onload = function ()
+    {
+        var modelChart = document.getElementById('model_chart');
+        var chart = new Chart(modelChart,
+        {
+            type: 'scatter',
+            data: {{ chartData|safe  }},
+        })
+    }
 </script>
 
 <div class="jumbotron">
-    <canvas id="myChart" width="500" height="400"></canvas>
+    <canvas id="model_chart"></canvas>
 </div>
 
 <div class="row">
