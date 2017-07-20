@@ -10,8 +10,8 @@ import app.forms
 import app.views
 
 # Uncomment the next lines to enable the admin:
-# from django.conf.urls import include
-# from django.contrib import admin
+from django.conf.urls import include
+from django.contrib import admin
 # admin.autodiscover()
 
 urlpatterns = [
