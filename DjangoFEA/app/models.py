@@ -21,6 +21,15 @@ class DataItem(models.Model):
     class Meta:
         abstract = True
 
+class Section(DataItem):
+    E = models.FloatField()
+    A = models.FloatField()
+    J = models.FloatField()
+    ro = models.FloatField()
+
+    def __str__(self):
+        return str(self.pk)
+
 class Node(DataItem):
     x = models.FloatField()
     y = models.FloatField()
@@ -46,13 +55,10 @@ class Node(DataItem):
         return K0,P0
 
     def __str__(self):
-        return str(self.x)
+        return str(self.x) + ', ' + str(self.y)
 
 class Element(DataItem):
-    E = models.FloatField()
-    A = models.FloatField()
-    J = models.FloatField()
-    ro = models.FloatField()
+    section = models.ForeignKey(Section, on_delete=models.CASCADE, unique=False)
     node_start = models.ForeignKey(Node, on_delete=models.CASCADE, related_name="node_start")
     node_end = models.ForeignKey(Node, on_delete=models.CASCADE, related_name="node_end")
     hinge_start = models.BooleanField()
@@ -90,10 +96,10 @@ class Element(DataItem):
         return xy
 
     def calculate_deflection_of_dead_loads(self, i, L, sin, cos):
-        E = self.E*100000000
-        A = self.A/10000
-        J = self.J/100000000
-        dl = self.ro*A/10000
+        E = self.section.E*100000000
+        A = self.section.A/10000
+        J = self.section.J/100000000
+        dl = self.section.ro*A/10000
 
         if self.hinge_start == False and self.hinge_end == False:
             dy_dead = -dl*i**2/24/E/J*(L-i)**2*cos*10000
@@ -110,9 +116,9 @@ class Element(DataItem):
         return dx_dead, dy_dead  
 
     def calculate_deflection(self, dis, i, L, sin, cos, node_a, node_b):
-        E = self.E*100000000
-        A = self.A/10000
-        J = self.J/100000000
+        E = self.section.E*100000000
+        A = self.section.A/10000
+        J = self.section.J/100000000
 
         #computed displacements
         u1 = dis[node_a*3]
@@ -170,9 +176,9 @@ class Element(DataItem):
         y2 = self.node_end.y      
         L = math.sqrt ((x2 - x1) **2 + (y2 - y1) **2)
             
-        E = self.E*100000000
-        A = self.A/10000
-        J = self.J/100000000
+        E = self.section.E*100000000
+        A = self.section.A/10000
+        J = self.section.J/100000000
         L = math.sqrt ((x2 - x1) **2 + (y2 - y1) **2)
         R = np.matrix([[x2 - x1, y1 - y2, 0],
                             [y2 - y1, x2 - x1, 0],
@@ -305,17 +311,13 @@ class Element(DataItem):
         return pZeros
 
     def __str__(self):
-        return str(self.E)
+        return str(self.pk)
 
 class Load(DataItem):
     type = models.IntegerField()
-    nature = models.IntegerField()
-    group = models.IntegerField()
     associated_element = models.ForeignKey(Element, on_delete=models.CASCADE, unique=False)
     f1 = models.FloatField()
-    f2 = models.FloatField()
     coord1 = models.FloatField()
-    coord2 = models.FloatField()
     m = models.FloatField()
     deg = models.FloatField()
 

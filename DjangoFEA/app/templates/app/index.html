@@ -21,25 +21,78 @@
 <div class="row">
     <div class="col-md-4">
         <h2>Nodes</h2>
-        {% for node in nodes %}
         <div class="post" id="nodes">
-            <p>{{ node.x }}</p>
-            <a href="{% url 'node_delete' pk=node.pk %}">Delete</a>
+            <table style="width:100%">
+                <tr>
+                    <th>X</th>
+                    <th>Y</th>
+                </tr>
+                {% for node in nodes %}
+                <tr>
+                    <td>{{ node.x }}</td>
+                    <td>{{ node.y }}</td>
+                    <td>{{ node.x_boundary_condition }}</td>
+                    <td>{{ node.y_boundary_condition }}</td>
+                    <td>{{ node.fi_boundary_condition }}</td>
+                    <td><a href="{% url 'node_delete' pk=node.pk %}">Delete</a></td>
+                </tr>            
+                {% endfor %}
+            </table>
         </div>
-        {% endfor %}
         <form method="POST" class="post-form" id="node-form">{% csrf_token %}
             {{ nodeForm.as_p }}
             <button type="submit" class="save btn btn-default" name="node">Add node</button>
         </form>
     </div>
     <div class="col-md-4">
-        <h2>Elements</h2>
-        {% for element in elements %}
-        <div class="post" id="elements">
-            <p>{{ element.node_start }}</p>
-            <a href="{% url 'element_delete' pk=element.pk %}">Delete</a>
+        <h2>Sections</h2>
+        <div class="post" id="sections">
+            <table style="width:100%">
+                <tr>
+                    <th>E</th>
+                    <th>A</th>
+                    <th>J</th>
+                    <th>Ro</th>
+                </tr>
+                {% for section in sections %}
+                <tr>
+                    <td>{{ section.E }}</td>
+                    <td>{{ section.A }}</td>
+                    <td>{{ section.J }}</td>
+                    <td>{{ section.ro }}</td>
+                    <td><a href="{% url 'section_delete' pk=section.pk %}">Delete</a></td>
+                </tr>            
+                {% endfor %}
+            </table>
         </div>
-        {% endfor %}
+        <form method="POST" class="post-form">{% csrf_token %}
+            {{ sectionForm.as_p }}
+            <button type="submit" class="save btn btn-default" name="section">Add section</button>
+        </form>
+
+
+
+
+        <h2>Elements</h2>
+        <div class="post" id="elements">
+            <table style="width:100%">
+                <tr>
+                    <th>Section</th>
+                    <th>Start</th>
+                    <th>End</th>
+                </tr>
+                {% for element in elements %}
+                <tr>
+                    <td>{{ element.section }}</td>
+                    <td>{{ element.node_start }}</td>
+                    <td>{{ element.node_end }}</td>
+                    <td>{{ element.hinge_start }}</td>
+                    <td>{{ element.hinge_end }}</td>
+                    <td><a href="{% url 'element_delete' pk=element.pk %}">Delete</a></td>
+                </tr>            
+                {% endfor %}
+            </table>
+        </div>
         <form method="POST" class="post-form">{% csrf_token %}
             {{ elementForm.as_p }}
             <button type="submit" class="save btn btn-default" name="element">Add element</button>
@@ -47,12 +100,29 @@
     </div>
     <div class="col-md-4">
         <h2>Loads</h2>
-        {% for load in loads %}
         <div class="post" id="loads">
-            <p>{{ load }}</p>
-            <a href="{% url 'load_delete' pk=load.pk %}">Delete</a>
+            <table style="width:100%">
+                <tr>
+                    <th>Type</th>
+                    <th>Element</th>
+                    <th>F1</th>
+                    <th>F2</th>
+                </tr>
+                {% for load in loads %}
+                <tr>
+                    <td>{{ load.type }}</td>
+                    <td>{{ load.associated_element }}</td>
+                    <td>{{ load.f1 }}</td>
+                    <td>{{ load.f2 }}</td>
+                    <td>{{ load.coord1 }}</td>
+                    <td>{{ load.coord2 }}</td>
+                    <td>{{ load.m }}</td>
+                    <td>{{ load.deg }}</td>
+                    <td><a href="{% url 'load_delete' pk=load.pk %}">Delete</a></td>
+                </tr>            
+                {% endfor %}
+            </table>
         </div>
-        {% endfor %}
         <form method="POST" class="load-form">{% csrf_token %}
             {{ loadForm.as_p }}
             <button type="submit" class="save btn btn-default" name="load">Add load</button>
