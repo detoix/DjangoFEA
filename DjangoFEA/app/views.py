@@ -40,23 +40,23 @@ def home(request):
         nodes = Node.objects.filter(author=request.user).order_by('created_date')
         elements = Element.objects.filter(author=request.user).order_by('created_date')
         loads = Load.objects.filter(author=request.user).order_by('created_date')
-        #Calculator().calc()
+        
     else:
         nodes = None
         elements = None
         loads = None
 
-    model = { 'data': [{ 'x': obj.x, 'y': obj.y} for obj in nodes], 'label': "Model4" }
+    model = { 'data': [{ 'x': obj.x, 'y': obj.y} for obj in nodes], 'label': "Model", 'lineTension': 0, 'fill': False }
 
     v1 = { 'x': -10, 'y': 0 };
     v2 = { 'x': 0, 'y': 10 };
     v3 = { 'x': 5, 'y': 11 };
     v4 = { 'x': 0, 'y': -30 };
-    result1 = { 'data': [v1, v2, v3, v4], 'label': "Results1" }
+    result1 = { 'data': [v1, v2, v3, v4], 'label': "Results1", 'fill': False }
 
-    r3 = { 'x': -10, 'y': -30 };
-    r4 = { 'x': -4, 'y': -10 };
-    result2 = { 'data': [r3, r4], 'label': "Results2" }
+    r3 = { 'x': -10, 'y': 10 };
+    r4 = { 'x': -4, 'y': 8 };
+    result2 = { 'data': Calculator().calc(), 'label': "Results2", 'fill': False }
 
     results = [result1, result2]
 
@@ -75,7 +75,6 @@ def home(request):
             'elementForm':ElementForm(),
             'loadForm':LoadForm(),
             'chartData':json.dumps(chart_data),
-            #'value':Calculator().run()
         })
 
 def node_delete(request, pk):

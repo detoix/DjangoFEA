@@ -58,8 +58,99 @@ class Element(DataItem):
     hinge_start = models.BooleanField()
     hinge_end = models.BooleanField()
 
+    @property
+    def num_of_calc(self):
+        return 100
+
     class Meta:
         unique_together = ('node_start', 'node_end')
+
+    def deflection(self, dis):
+        L = math.sqrt ((self.node_end.x - self.node_start.x) **2 + (self.node_end.y - self.node_start.y) **2)
+        sin = (self.node_end.y - self.node_start.y) / L
+        cos = (self.node_end.x - self.node_start.x) / L
+        node_a = list(Node.objects.all()).index(self.node_start)
+        node_b = list(Node.objects.all()).index(self.node_end)
+
+        xy = []
+        length = np.linspace(0, L, self.num_of_calc + 1)
+        for i in length:
+            [x_dead, y_dead] = self.calculate_deflection_of_dead_loads(i, L, sin, cos)
+            [x, y] = self.calculate_deflection(dis, i, L, sin, cos, node_a, node_b)
+
+            dx = x + x_dead
+            dy = y + y_dead
+
+            scale = 10
+            u = self.node_start.x + ((i + dx * scale) * cos - dy * scale * sin)
+            v = self.node_start.y + ((i + dx * scale) * sin + dy * scale * cos)
+
+            xy.append({ 'x': u, 'y': v })
+
+        return xy
+
+    def calculate_deflection_of_dead_loads(self, i, L, sin, cos):
+        E = self.E*100000000
+        A = self.A/10000
+        J = self.J/100000000
+        dl = self.ro*A/10000
+
+        if self.hinge_start == False and self.hinge_end == False:
+            dy_dead = -dl*i**2/24/E/J*(L-i)**2*cos*10000
+        elif self.hinge_start == True and self.hinge_end == False:
+            dy_dead = -dl*i/48/E/J*(L**3-3*L*i**2+2*i**3)*cos*10000
+        elif self.hinge_start == False and self.hinge_end == True:
+            dy_dead = -dl*(L-i)/48/E/J*(L**3-3*L*(L-i)**2+2*(L-i)**3)*cos*10000
+        elif self.hinge_start == True and self.hinge_end == True:
+            dy_dead = -dl*i/24/E/J*(L**3-2*L*i**2+i**3)*cos*10000
+          
+        #dead load
+        dx_dead = (- dl*sin*L*(L-0-L/2)/L*i/(E*A) + dl*sin*(i-0)**2/(E*A)/2)*10000
+
+        return dx_dead, dy_dead  
+
+    def calculate_deflection(self, dis, i, L, sin, cos, node_a, node_b):
+        E = self.E*100000000
+        A = self.A/10000
+        J = self.J/100000000
+
+        #computed displacements
+        u1 = dis[node_a*3]
+        v1 = dis[node_a*3 + 1]
+        f1 = dis[node_a*3 + 2]
+        u2 = dis[node_b*3]
+        v2 = dis[node_b*3 + 1]
+        f2 = dis[node_b*3 + 2]
+
+        zeta = i/L
+        if self.hinge_start == False and self.hinge_end == False:
+            V1 = (1-3*(zeta**2)+2*(zeta**3))
+            V2 = L*(zeta-2*(zeta**2)+(zeta**3))
+            V3 = (3*(zeta**2)-2*(zeta**3))
+            V4 = L*(-(zeta**2)+(zeta**3))
+        elif self.hinge_start == False and self.hinge_end == True:
+            V1 = (1-3/2*(zeta**2)+1/2*(zeta**3))
+            V2 = 1/2*(zeta**2)*i-3/2*zeta*i+i
+            V3 = (3/2*(zeta**2)-1/2*(zeta**3))
+            V4 = 0
+        elif self.hinge_start == True and self.hinge_end == False:
+            V1 = (1+1/2*(zeta**3)-3/2*zeta)
+            V2 = 0
+            V3 = -1/2*(zeta**3)+3/2*zeta
+            V4 = -1/2*i+1/2*(zeta**2)*i
+        elif self.hinge_start == True and self.hinge_end == True:
+            V1 = (1-zeta)
+            V2 = 0
+            V3 = zeta
+            V4 = 0
+        dy = (-u1*sin+v1*cos)*V1+f1*V2+(-u2*sin+v2*cos)*V3+f2*V4
+
+        #parallel displacements
+        U1 = -(i-L)/L
+        U2 = i/L
+        dx = (u1*cos+v1*sin)*U1+(u2*cos+v2*sin)*U2
+        
+        return dx, dy
 
     #assembling stiffness matrix
     '''The function acts as follows:
@@ -355,6 +446,11 @@ class Calculator():
     def run(self):
         return self.loads[0].abc()
 
+    #calculate displacements
+    '''The function acts as follows:
+        1. 
+        '''
+
     def calc(self):
         dof = 3
         Neq = dof * len(Node.objects.all())
@@ -369,3 +465,7 @@ class Calculator():
                 [K0, P0] = node.bc(K0, P0)
             displacements = np.linalg.solve(K0,P0)
             reactions = np.dot(K, displacements)-P
+
+        for element in self.elements:
+            xy = element.deflection(displacements)
+        return xy

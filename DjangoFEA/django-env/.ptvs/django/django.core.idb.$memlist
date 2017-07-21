@@ -1,5 +1,5 @@
 mail
-checks
+servers
 signals
 signing
 validators
@@ -12,4 +12,4 @@ serializers
 management
 handlers
 paginator
-servers
+checks
