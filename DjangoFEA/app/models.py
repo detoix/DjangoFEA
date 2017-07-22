@@ -468,6 +468,6 @@ class Calculator():
             displacements = np.linalg.solve(K0,P0)
             reactions = np.dot(K, displacements)-P
 
-        #for element in self.elements:
-            #xy = element.deflection(displacements)
-        #return xy
+        for element in self.elements:
+            xy = element.deflection(displacements)
+        return xy
