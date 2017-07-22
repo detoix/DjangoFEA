@@ -39,6 +39,7 @@ class Node(DataItem):
 
     #kinematic boundary conditions - zeroing rows and placing ones diagonally
     def bc(self,K0,P0):
+        sss = list(Node.objects.all())[0]
         self.id = list(Node.objects.all()).index(self)
         if self.x_boundary_condition == True:
             K0[self.id * 3,:]=0
