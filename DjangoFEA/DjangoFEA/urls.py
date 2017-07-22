@@ -12,10 +12,10 @@ import app.views
 # Uncomment the next lines to enable the admin:
 from django.conf.urls import include
 from django.contrib import admin
-from app.models import Post
+from app.models import Node
 
 admin.autodiscover()
-admin.site.register(Post)
+admin.site.register(Node)
 
 urlpatterns = [
     # Examples:
