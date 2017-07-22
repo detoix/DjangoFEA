@@ -48,7 +48,7 @@ def home(request):
         loads = Load.objects.filter(author=request.user).order_by('created_date')
 
         model = { 'data': [{ 'x': obj.x, 'y': obj.y} for obj in nodes], 'label': "Model", 'lineTension': 0, 'fill': False }
-        
+        Calculator().calc()
     else:
         nodes = None
         sections = None
@@ -67,7 +67,7 @@ def home(request):
 
     r3 = { 'x': -10, 'y': 10 };
     r4 = { 'x': -4, 'y': 8 };
-    result2 = { 'data': Calculator().calc(), 'label': "Results2", 'fill': False }
+    result2 = { 'data': [r3, r4], 'label': "Results2", 'fill': False }
 
     results = [result1, result2]
 
