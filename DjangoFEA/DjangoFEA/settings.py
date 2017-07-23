@@ -34,7 +34,6 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'app',
     'chartjs',
-    'crispy_forms',
     # Add your apps here to enable them
     'django.contrib.admin',
     'django.contrib.auth',

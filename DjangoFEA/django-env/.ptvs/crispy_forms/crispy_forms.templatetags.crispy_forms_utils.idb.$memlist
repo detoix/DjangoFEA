@@ -1,9 +1,0 @@
-text_type
-template
-register
-remove_spaces
-allow_lazy
-specialspaceless
-SpecialSpacelessNode
-force_text
-re

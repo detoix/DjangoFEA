@@ -101,11 +101,11 @@
                 {% endfor %}
                 <tr>
                     <form method="POST" class="form" id="element-form">{% csrf_token %}
-                        <td>{{ element.section }}</td>
-                        <td>{{ element.node_start }}</td>
-                        <td>{{ element.node_end }}</td>
-                        <td>{{ element.hinge_start }}</td>
-                        <td>{{ element.hinge_end }}</td>
+                        <td>{{ elementForm.section }}</td>
+                        <td>{{ elementForm.node_start }}</td>
+                        <td>{{ elementForm.node_end }}</td>
+                        <td>{{ elementForm.hinge_start }}</td>
+                        <td>{{ elementForm.hinge_end }}</td>
                         <td><button type="submit" class="save btn btn-default" name="element">Add element</button></td>
                     </form>
                 </tr>
