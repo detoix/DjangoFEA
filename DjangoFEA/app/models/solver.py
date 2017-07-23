@@ -38,13 +38,9 @@ class Solver():
         displacements = np.linalg.solve(K0,P0)
         reactions = np.dot(K, displacements)-P
 
-        to_return = []
+        result = []
         for element in self.elements:
-            associated_loads = ConcentratedLoad.objects.filter(author=self.user).filter(associated_element=element)
+            associated_loads = self.loads.filter(associated_element=element)
             xy = element.deflection(displacements, associated_loads)
-
-            result2 = { 'data': xy, 'label': 'Results ' + str(element), 'fill': False }
-
-            to_return.append(result2)
-        return to_return
-
+            result.append({ 'data': xy, 'label': 'Results ' + str(element), 'fill': False })
+        return result

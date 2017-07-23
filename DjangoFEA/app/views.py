@@ -59,29 +59,13 @@ def home(request):
                         'label': 'Bar ' + str(obj),
                         'lineTension': 0,
                         'fill': False } for obj in elements]
+        chart_data = { 'datasets': model_nodes + model_bars + Solver(request.user).solve() }
     else:
         nodes = None
         sections = None
         elements = None
         loads = None
-        model_nodes = None
-        model_bars = None
-
-    v1 = { 'x': -2, 'y': 0 };
-    v2 = { 'x': 0, 'y': 3 };
-    v3 = { 'x': 3, 'y': 3 };
-    v4 = { 'x': 0, 'y': -3 };
-    #result1 = { 'data': Solver(request.user).solve(), 'label': "Results1", 'fill': False }
-    result1 = { 'data': [v1,v2,v3,v4], 'label': "Results1", 'fill': False }
-
-    r3 = { 'x': -10, 'y': 10 };
-    r4 = { 'x': -4, 'y': 8 };
-    result2 = { 'data': [r3, r4], 'label': "Results2", 'fill': False }
-
-    results = [result1, result2]
-
-
-    chart_data = { 'datasets': model_nodes + model_bars + Solver(request.user).solve() }
+        chart_data = None
 
     #response
     return render(request, 'app/index.html', 
@@ -97,7 +81,6 @@ def home(request):
             'elementForm':ElementForm(),
             'loadForm':ConcentratedLoadForm(),
             'chartData':json.dumps(chart_data),
-            #'value':Calculator().run()
         })
 
 def node_delete(request, pk):

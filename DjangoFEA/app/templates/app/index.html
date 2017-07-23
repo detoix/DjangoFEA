@@ -24,8 +24,8 @@
         <div class="post" id="nodes">
             <table>
                 <tr>
-                    <th>X [m]</th>
-                    <th>Y [m]</th>
+                    <th>X|m</th>
+                    <th>Y|m</th>
                 </tr>
                 {% for node in nodes %}
                 <tr>
@@ -36,7 +36,7 @@
                     <td>{{ node.fi_boundary_condition|yesno:"X,O" }}</td>
                     <td class="display-flex">
                         <a class="save btn btn-default btn-sm" href="{% url 'node_delete' pk=node.pk %}">Edit</a>
-                        <a class="save btn btn-default btn-sm btn-block" href="{% url 'node_delete' pk=node.pk %}">Del</a>
+                        <a class="save btn btn-default btn-sm" href="{% url 'node_delete' pk=node.pk %}">-</a>
                     </td>
                 </tr>            
                 {% endfor %}
@@ -59,10 +59,10 @@
             <table>
                 <tr>
                     <th>ID</th>
-                    <th>E [GPa]</th>
-                    <th>A [cm<sup>2</sup>]</th>
-                    <th>J [cm<sup>4</sup>]</th>
-                    <th>&#947; [kN/m<sup>3</sup>]</th>
+                    <th>E|GPa</th>
+                    <th>A|cm<sup>2</sup></th>
+                    <th>J|cm<sup>4</sup></th>
+                    <th>&#947;|kN/m<sup>3</sup></th>
                 </tr>
                 {% for section in sections %}
                 <tr>
@@ -73,7 +73,7 @@
                     <td>{{ section.ro }}</td>
                     <td class="display-flex">
                         <a class="save btn btn-default btn-sm" href="{% url 'section_delete' pk=section.pk %}">Edit</a>
-                        <a class="save btn btn-default btn-sm btn-block" href="{% url 'section_delete' pk=section.pk %}">Del</a>
+                        <a class="save btn btn-default btn-sm" href="{% url 'section_delete' pk=section.pk %}">-</a>
                     </td>
                 </tr>            
                 {% endfor %}
@@ -109,7 +109,7 @@
                     <td>{{ element.hinge_end|yesno:"X,O" }}</td>
                     <td class="display-flex">
                         <a class="save btn btn-default btn-sm" href="{% url 'element_delete' pk=element.pk %}">Edit</a>
-                        <a class="save btn btn-default btn-sm btn-block" href="{% url 'element_delete' pk=element.pk %}">Del</a>
+                        <a class="save btn btn-default btn-sm" href="{% url 'element_delete' pk=element.pk %}">-</a>
                     </td>
                 </tr>            
                 {% endfor %}
@@ -133,10 +133,10 @@
             <table>
                 <tr>
                     <th>Element</th>
-                    <th>F [kN]</th>
-                    <th>x/L [-]</th>
-                    <th>M [kNm]</th>
-                    <th>[<sup>o</sup>]</th>
+                    <th>F|kN</th>
+                    <th>x/L|-</th>
+                    <th>M|kNm</th>
+                    <th>deg|<sup>o</sup></th>
                 </tr>
                 {% for load in loads %}
                 <tr>
@@ -147,7 +147,7 @@
                     <td>{{ load.deg }}</td>
                     <td class="display-flex">
                         <a class="save btn btn-default btn-sm" href="{% url 'load_delete' pk=load.pk %}">Edit</a>
-                        <a class="save btn btn-default btn-sm btn-block" href="{% url 'load_delete' pk=load.pk %}">Del</a>
+                        <a class="save btn btn-default btn-sm" href="{% url 'load_delete' pk=load.pk %}">-</a>
                     </td>
                 </tr>            
                 {% endfor %}
@@ -169,11 +169,11 @@
             <table>
                 <tr>
                     <th>Element</th>
-                    <th>F1 [kN/m]</th>
-                    <th>F2 [kN/m]</th>
-                    <th>x1/L [-]</th>
-                    <th>x2/L [-]</th>
-                    <th>[<sup>o</sup>]</th>
+                    <th>F1|kN/m</th>
+                    <th>F2|kN/m</th>
+                    <th>x1/L|-</th>
+                    <th>x2/L|-</th>
+                    <th>deg|<sup>o</sup></th>
                 </tr>
 
                 <tr>
@@ -185,7 +185,7 @@
                     <td></td>
                     <td class="display-flex">
                         <a class="save btn btn-default btn-sm">Edit</a>
-                        <a class="save btn btn-default btn-sm btn-block">Del</a>
+                        <a class="save btn btn-default btn-sm">-</a>
                     </td>
                 </tr>          
             </table>

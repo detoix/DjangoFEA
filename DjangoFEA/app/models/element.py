@@ -255,7 +255,7 @@ class Element(DataItem):
         if bc0 == True and bc1 == True:
             po[node_a*3+1] += -dl*L/2
             po[node_b*3+1] += -dl*L/2    
-       
+
         return po
 
     def __str__(self):
