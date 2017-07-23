@@ -314,7 +314,7 @@ class Element(DataItem):
         return str(self.pk)
 
 class Load(DataItem):
-    type = models.IntegerField()
+    #type = models.IntegerField()
     associated_element = models.ForeignKey(Element, on_delete=models.CASCADE, unique=False)
     f1 = models.FloatField()
     coord1 = models.FloatField()

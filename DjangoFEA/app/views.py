@@ -4,7 +4,7 @@ Definition of views.
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core import serializers
-from app.forms import NodeForm, SectionForm, ElementForm, LoadFormFactory, LoadForm
+from app.forms import NodeForm, SectionForm, ElementForm, ConcentratedLoadForm
 from app.models import Node, Section, Element, Load, ConcentratedLoad, DistributedLoad, DistributedXLoad, Calculator
 from django.http import HttpRequest
 from datetime import datetime
@@ -19,7 +19,7 @@ def home(request):
         nodeForm = NodeForm(request.POST)
         sectionForm = SectionForm(request.POST)
         elementForm = ElementForm(request.POST)
-        loadForm = LoadForm(request.POST)
+        loadForm = ConcentratedLoadForm(request.POST)
         if request.POST.get('node') != None and nodeForm.is_valid():
             item = nodeForm.save(commit=False)
             item.author = request.user
@@ -33,7 +33,6 @@ def home(request):
             item.author = request.user
             item.save()
         elif request.POST.get('load') != None and loadForm.is_valid():
-            loadForm = LoadFormFactory(request).make()
             item = loadForm.save(commit=False)
             item.author = request.user
             item.save()
@@ -67,7 +66,7 @@ def home(request):
 
     r3 = { 'x': -10, 'y': 10 };
     r4 = { 'x': -4, 'y': 8 };
-    result2 = { 'data': Calculator().calc(), 'label': "Results2", 'fill': False }
+    result2 = { 'data': [r3, r4], 'label': "Results2", 'fill': False }
 
     results = [result1, result2]
 
@@ -86,7 +85,7 @@ def home(request):
             'nodeForm':NodeForm(),
             'sectionForm':SectionForm(),
             'elementForm':ElementForm(),
-            'loadForm':LoadForm(),
+            'loadForm':ConcentratedLoadForm(),
             'chartData':json.dumps(chart_data),
             #'value':Calculator().run()
         })

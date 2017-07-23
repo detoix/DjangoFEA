@@ -1,0 +1,10 @@
+PY2
+text_type
+binary_type
+lru_cache
+memoize
+integer_types
+SimpleLazyObject
+basestring
+string_types
+sys

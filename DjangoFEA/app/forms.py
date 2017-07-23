@@ -19,32 +19,32 @@ class BootstrapAuthenticationForm(AuthenticationForm):
                                    'placeholder':'Password'}))
 
 class NodeForm(forms.ModelForm):
-    x = forms.FloatField(initial=0)
-    y = forms.FloatField(initial=0)
-    x_boundary_condition = forms.BooleanField(required=False)
-    y_boundary_condition = forms.BooleanField(required=False)
-    fi_boundary_condition = forms.BooleanField(required=False)
+    x = forms.FloatField(label="")
+    y = forms.FloatField(label="")
+    x_boundary_condition = forms.BooleanField(required=False, label="")
+    y_boundary_condition = forms.BooleanField(required=False, label="")
+    fi_boundary_condition = forms.BooleanField(required=False, label="")
 
     class Meta:
         model = Node
         fields = ('x', 'y', 'x_boundary_condition', 'y_boundary_condition', 'fi_boundary_condition')
 
 class SectionForm(forms.ModelForm):
-    E = forms.FloatField(initial=0)
-    A = forms.FloatField(initial=0)
-    J = forms.FloatField(initial=0)
-    ro = forms.FloatField(initial=0)
+    E = forms.FloatField(label="")
+    A = forms.FloatField(label="")
+    J = forms.FloatField(label="")
+    ro = forms.FloatField(label="")
 
     class Meta:
         model = Section
         fields = ('E', 'A', 'J', 'ro')
 
 class ElementForm(forms.ModelForm):
-    section = forms.ModelChoiceField(queryset = Section.objects.all())
-    node_start = forms.ModelChoiceField(queryset = Node.objects.all())
-    node_end = forms.ModelChoiceField(queryset = Node.objects.all())
-    hinge_start = forms.BooleanField(required=False)
-    hinge_end = forms.BooleanField(required=False)
+    section = forms.ModelChoiceField(queryset = Section.objects.all(), label="")
+    node_start = forms.ModelChoiceField(queryset = Node.objects.all(), label="")
+    node_end = forms.ModelChoiceField(queryset = Node.objects.all(), label="")
+    hinge_start = forms.BooleanField(required=False, label="")
+    hinge_end = forms.BooleanField(required=False, label="")
 
     class Meta:
         model = Element
@@ -64,16 +64,16 @@ class LoadFormFactory():
             return DistributedXLoadForm(self.request.POST)
 
 class LoadForm(forms.ModelForm):
-    type = forms.ChoiceField(choices=[('0','concentrated'),  ('1','distributed'), ('2', 'distributed x')])
-    associated_element = forms.ModelChoiceField(queryset = Element.objects.all())
-    f1 = forms.FloatField(initial=0)
-    coord1 = forms.FloatField(initial=0)
-    m = forms.FloatField(initial=0)
-    deg = forms.FloatField(initial=0)
+    #type = forms.ChoiceField(choices=[('0','concentrated'),  ('1','distributed'), ('2', 'distributed x')], label="")
+    associated_element = forms.ModelChoiceField(queryset = Element.objects.all(), label="")
+    f1 = forms.FloatField(label="")
+    coord1 = forms.FloatField(label="")
+    m = forms.FloatField(label="")
+    deg = forms.FloatField(label="")
 
     class Meta:
         model = Load
-        fields = ('type', 'associated_element', 'f1', 'coord1', 'm', 'deg')
+        fields = ('associated_element', 'f1', 'coord1', 'm', 'deg')
 
 class ConcentratedLoadForm(LoadForm):
     class Meta:
