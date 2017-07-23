@@ -18,8 +18,8 @@ admin.autodiscover()
 admin.site.register(Node)
 
 urlpatterns = [
-    # Examples:
     url(r'^$', app.views.home, name='home'),
+    #url(r'^node/(?P<pk>[0-9]+)/edit/$', app.views.home, name='node_edit'),
     #url(r'^node/(?P<pk>[0-9]+)/edit/$', app.views.node_edit, name='node_edit'),
     #url(r'^element/(?P<pk>[0-9]+)/edit/$', app.views.element_edit, name='element_edit'),
     url(r'^node/(?P<pk>[0-9]+)/delete/$', app.views.node_delete, name='node_delete'),

@@ -5,7 +5,7 @@ Definition of views.
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core import serializers
 from app.forms import NodeForm, SectionForm, ElementForm, ConcentratedLoadForm
-from app.models import Node, Section, Element, Load, ConcentratedLoad, DistributedLoad, DistributedXLoad, Calculator
+from app.models import Node, Section, Element, Load, ConcentratedLoad, DistributedLoad, DistributedXLoad, Solver
 from django.http import HttpRequest
 from datetime import datetime
 import json
@@ -62,7 +62,7 @@ def home(request):
     v2 = { 'x': 0, 'y': 3 };
     v3 = { 'x': 3, 'y': 3 };
     v4 = { 'x': 0, 'y': -3 };
-    result1 = { 'data': [v1, v2, v3, v4], 'label': "Results1", 'fill': False }
+    result1 = { 'data': Solver().calc(), 'label': "Results1", 'fill': False }
 
     r3 = { 'x': -10, 'y': 10 };
     r4 = { 'x': -4, 'y': 8 };

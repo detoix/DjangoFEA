@@ -24,17 +24,20 @@
         <div class="post" id="nodes">
             <table style="width:100%">
                 <tr>
-                    <th>X</th>
-                    <th>Y</th>
+                    <th>X [m]</th>
+                    <th>Y [m]</th>
                 </tr>
                 {% for node in nodes %}
                 <tr>
                     <td>{{ node.x }}</td>
                     <td>{{ node.y }}</td>
-                    <td>{{ node.x_boundary_condition }}</td>
-                    <td>{{ node.y_boundary_condition }}</td>
-                    <td>{{ node.fi_boundary_condition }}</td>
-                    <td><a href="{% url 'node_delete' pk=node.pk %}">Delete</a></td>
+                    <td>{{ node.x_boundary_condition|yesno:"X,O" }}</td>
+                    <td>{{ node.y_boundary_condition|yesno:"X,O" }}</td>
+                    <td>{{ node.fi_boundary_condition|yesno:"X,O" }}</td>
+                    <td class="display-flex">
+                        <a class="save btn btn-default btn-sm btn-block" href="{% url 'node_delete' pk=node.pk %}">Del</a>
+                        <a class="save btn btn-default btn-sm" href="{% url 'node_delete' pk=node.pk %}">Edit</a>
+                    </td>
                 </tr>            
                 {% endfor %}
                 <tr>
@@ -44,7 +47,7 @@
                         <td>{{ nodeForm.x_boundary_condition }}</td>
                         <td>{{ nodeForm.y_boundary_condition }}</td>
                         <td>{{ nodeForm.fi_boundary_condition }}</td>
-                        <td><button type="submit" class="save btn btn-default" name="node">Add node</button></td>
+                        <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="node">Add node</button></td>
                     </form>
                 </tr>
             </table>
@@ -55,10 +58,10 @@
         <div class="post" id="sections">
             <table style="width:100%">
                 <tr>
-                    <th>E</th>
-                    <th>A</th>
-                    <th>J</th>
-                    <th>Ro</th>
+                    <th>E [GPa]</th>
+                    <th>A [cm<sup>2</sup>]</th>
+                    <th>J [cm<sup>4</sup>]</th>
+                    <th>&#947; [kN/m<sup>3</sup>]</th>
                 </tr>
                 {% for section in sections %}
                 <tr>
@@ -66,7 +69,10 @@
                     <td>{{ section.A }}</td>
                     <td>{{ section.J }}</td>
                     <td>{{ section.ro }}</td>
-                    <td><a href="{% url 'section_delete' pk=section.pk %}">Delete</a></td>
+                    <td class="display-flex">
+                        <a class="save btn btn-default btn-sm btn-block" href="{% url 'section_delete' pk=section.pk %}">Del</a>
+                        <a class="save btn btn-default btn-sm" href="{% url 'section_delete' pk=section.pk %}">Edit</a>
+                    </td>
                 </tr>            
                 {% endfor %}
                 <tr>
@@ -75,7 +81,7 @@
                         <td>{{ sectionForm.A }}</td>
                         <td>{{ sectionForm.J }}</td>
                         <td>{{ sectionForm.ro }}</td>
-                        <td><button type="submit" class="save btn btn-default" name="section">Add section</button></td>
+                        <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="section">Add section</button></td>
                     </form>
                 </tr>
             </table>
@@ -94,9 +100,12 @@
                     <td>{{ element.section }}</td>
                     <td>{{ element.node_start }}</td>
                     <td>{{ element.node_end }}</td>
-                    <td>{{ element.hinge_start }}</td>
-                    <td>{{ element.hinge_end }}</td>
-                    <td><a href="{% url 'element_delete' pk=element.pk %}">Delete</a></td>
+                    <td>{{ element.hinge_start|yesno:"X,O" }}</td>
+                    <td>{{ element.hinge_end|yesno:"X,O" }}</td>
+                    <td class="display-flex">
+                        <a class="save btn btn-default btn-sm btn-block" href="{% url 'element_delete' pk=element.pk %}">Del</a>
+                        <a class="save btn btn-default btn-sm" href="{% url 'element_delete' pk=element.pk %}">Edit</a>
+                    </td>
                 </tr>            
                 {% endfor %}
                 <tr>
@@ -106,22 +115,22 @@
                         <td>{{ elementForm.node_end }}</td>
                         <td>{{ elementForm.hinge_start }}</td>
                         <td>{{ elementForm.hinge_end }}</td>
-                        <td><button type="submit" class="save btn btn-default" name="element">Add element</button></td>
+                        <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="element">Add element</button></td>
                     </form>
                 </tr>
             </table>
         </div>
     </div>
     <div class="col-md-4">
-        <h2>Loads</h2>
-        <div class="post" id="loads">
+        <h2>Concentrated Loads</h2>
+        <div class="post" id="concentrated-loads">
             <table style="width:100%">
                 <tr>
                     <th>Element</th>
-                    <th>F1</th>
-                    <th>Coord</th>
-                    <th>M</th>
-                    <th>deg</th>
+                    <th>F [kN]</th>
+                    <th>x/L [-]</th>
+                    <th>M [kNm]</th>
+                    <th>[<sup>o</sup>]</th>
                 </tr>
                 {% for load in loads %}
                 <tr>
@@ -130,7 +139,10 @@
                     <td>{{ load.coord1 }}</td>
                     <td>{{ load.m }}</td>
                     <td>{{ load.deg }}</td>
-                    <td><a href="{% url 'load_delete' pk=load.pk %}">Delete</a></td>
+                    <td class="display-flex">
+                        <a class="save btn btn-default btn-sm btn-block" href="{% url 'load_delete' pk=load.pk %}">Del</a>
+                        <a class="save btn btn-default btn-sm" href="{% url 'load_delete' pk=load.pk %}">Edit</a>
+                    </td>
                 </tr>            
                 {% endfor %}
                 <tr>
@@ -140,9 +152,38 @@
                         <td>{{ loadForm.coord1 }}</td>
                         <td>{{ loadForm.m }}</td>
                         <td>{{ loadForm.deg }}</td>
-                        <td><button type="submit" class="save btn btn-default" name="load">Add load</button></td>
+                        <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="load">Add load</button></td>
                     </form>
                 </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <h2>Distributed Loads</h2>
+        <div class="post" id="distributed-loads">
+            <table style="width:100%">
+                <tr>
+                    <th>Element</th>
+                    <th>F1 [kN/m]</th>
+                    <th>F2 [kN/m]</th>
+                    <th>x1/L [-]</th>
+                    <th>x2/L [-]</th>
+                    <th>[<sup>o</sup>]</th>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="display-flex">
+                        <a class="save btn btn-default btn-sm btn-block">Del</a>
+                        <a class="save btn btn-default btn-sm">Edit</a>
+                    </td>
+                </tr>          
             </table>
         </div>
     </div>

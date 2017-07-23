@@ -31,7 +31,25 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app\forms.py" />
-    <Compile Include="app\models.py" />
+    <Compile Include="app\models\data_item.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="app\models\element.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="app\models\load.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="app\models\node.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="app\models\section.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="app\models\solver.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="app\models\__init__.py" />
     <Compile Include="app\tests.py" />
     <Compile Include="app\views.py" />
     <Compile Include="app\__init__.py" />
@@ -41,6 +59,7 @@
   <ItemGroup>
     <Folder Include="app\" />
     <Folder Include="app\migrations\" />
+    <Folder Include="app\models\" />
     <Folder Include="app\static\" />
     <Folder Include="app\static\app\" />
     <Folder Include="app\static\app\content\" />

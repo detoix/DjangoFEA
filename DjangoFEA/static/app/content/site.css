@@ -44,3 +44,11 @@ input[type="checkbox"].input-validation-error {
 .validation-summary-valid {
     display: none;
 }
+
+.display-flex {
+    display: flex
+}
+
+.display-grid {
+    display: grid
+}
