@@ -17,7 +17,7 @@ textarea {
 }
 
 input[type="number"] {
-    max-width: 50px;
+    width: 100%
 }
 
 /* styles for validation helpers */
@@ -46,9 +46,14 @@ input[type="checkbox"].input-validation-error {
 }
 
 .display-flex {
-    display: flex
+    display: flex;
 }
 
 .display-grid {
-    display: grid
+    display: grid;
+}
+
+.post {
+    width: 100%;
+    table-layout: fixed;
 }

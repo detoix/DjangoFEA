@@ -17,7 +17,7 @@ textarea {
 }
 
 input[type="number"] {
-    max-width: 50px;
+    max-width: 300px;
 }
 
 /* styles for validation helpers */
