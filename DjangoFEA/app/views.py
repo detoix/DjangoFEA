@@ -44,25 +44,35 @@ def home(request):
         nodes = Node.objects.filter(author=request.user).order_by('created_date')
         sections = Section.objects.filter(author=request.user).order_by('created_date')
         elements = Element.objects.filter(author=request.user).order_by('created_date')
-        loads = Load.objects.filter(author=request.user).order_by('created_date')
-
-        model = { 'data': [{ 'x': obj.x, 'y': obj.y} for obj in nodes], 'label': "Model", 'lineTension': 0, 'fill': False }
-        
+        loads = ConcentratedLoad.objects.filter(author=request.user).order_by('created_date')
+        model_nodes = [{ 'data': 
+                            [{ 'x': obj.x, 'y': obj.y} for obj in nodes], 
+                         'label': "Nodes", 
+                         'lineTension': 0,
+                         'fill': False,
+                         'pointStyle': 'triangle',
+                         'pointRadius': 10,
+                         'showLine': False }]
+        model_bars = [{ 'data': 
+                            [{ 'x': obj.node_start.x, 'y': obj.node_start.y},
+                             { 'x': obj.node_end.x, 'y': obj.node_end.y}], 
+                        'label': 'Bar ' + str(obj),
+                        'lineTension': 0,
+                        'fill': False } for obj in elements]
     else:
         nodes = None
         sections = None
         elements = None
         loads = None
-
-        model = None
-
-    
+        model_nodes = None
+        model_bars = None
 
     v1 = { 'x': -2, 'y': 0 };
     v2 = { 'x': 0, 'y': 3 };
     v3 = { 'x': 3, 'y': 3 };
     v4 = { 'x': 0, 'y': -3 };
-    result1 = { 'data': Solver().calc(), 'label': "Results1", 'fill': False }
+    #result1 = { 'data': Solver(request.user).solve(), 'label': "Results1", 'fill': False }
+    result1 = { 'data': [v1,v2,v3,v4], 'label': "Results1", 'fill': False }
 
     r3 = { 'x': -10, 'y': 10 };
     r4 = { 'x': -4, 'y': 8 };
@@ -71,7 +81,7 @@ def home(request):
     results = [result1, result2]
 
 
-    chart_data = { 'datasets': [model] + results }
+    chart_data = { 'datasets': model_nodes + model_bars + Solver(request.user).solve() }
 
     #response
     return render(request, 'app/index.html', 

@@ -17,7 +17,7 @@ class Element(DataItem):
     class Meta:
         unique_together = ('node_start', 'node_end')
 
-    def deflection(self, dis):
+    def deflection(self, dis, associated_loads):
         L = math.sqrt ((self.node_end.x - self.node_start.x) **2 + (self.node_end.y - self.node_start.y) **2)
         sin = (self.node_end.y - self.node_start.y) / L
         cos = (self.node_end.x - self.node_start.x) / L
@@ -30,10 +30,17 @@ class Element(DataItem):
             [x_dead, y_dead] = self.calculate_deflection_of_dead_loads(i, L, sin, cos)
             [x, y] = self.calculate_deflection(dis, i, L, sin, cos, node_a, node_b)
 
-            dx = x + x_dead
-            dy = y + y_dead
+            x_load = 0
+            y_load = 0
+            for load in associated_loads:
+                [x_l, y_l] = load.dis_loads(i)
+                x_load += x_l
+                y_load += y_l
 
-            scale = 10
+            dx = x_dead + x + x_load
+            dy = y_dead + y + y_load
+
+            scale = 100000
             u = self.node_start.x + ((i + dx * scale) * cos - dy * scale * sin)
             v = self.node_start.y + ((i + dx * scale) * sin + dy * scale * cos)
 
@@ -115,7 +122,7 @@ class Element(DataItem):
         7. assemble Bg, Cg, Dg (global coordinates) into global stiffness matrix Ko
         '''
 
-    def assemble(self, dof, Ko):
+    def assemble(self, Ko):
         x1 = self.node_start.x
         y1 = self.node_start.y
         x2 = self.node_end.x
@@ -194,8 +201,8 @@ class Element(DataItem):
         node_a = list(Node.objects.all()).index(self.node_start)
         node_b = list(Node.objects.all()).index(self.node_end)
 
-        ne = node_a * dof
-        ke = node_b * dof
+        ne = node_a * 3
+        ke = node_b * 3
         Ko[ne:ne+Dg.shape[0], ne:ne+Dg.shape[1]] += Dg
         Ko[ke:ke+Bg.shape[0], ke:ke+Bg.shape[1]] += Bg
         Ko[ne:ne+Cg.shape[0], ke:ke+Cg.shape[1]] += Cg
@@ -208,12 +215,7 @@ class Element(DataItem):
         2. update global force matrix po
         '''
 
-    def dead(self, pZeros):
-        dof = 3
-        Neq = dof * len(Node.objects.all())
-        po = np.empty(Neq)
-        po.fill(0)
-
+    def dead(self, po):
         x1 = self.node_start.x
         y1 = self.node_start.y
         x2 = self.node_end.x
@@ -228,33 +230,33 @@ class Element(DataItem):
         sin = (y2-y1) / L
         cos = (x2-x1) / L 
 
-        ro = self.ro/100
-        A = self.A
+        ro = self.section.ro/100
+        A = self.section.A
         dl = ro*A/100
         if bc0 == False and bc1 == False:
-            po[node_a*dof+1] += -dl*L/2
-            po[node_a*dof+2] += -dl*L**2/12*cos
-            po[node_b*dof+1] += -dl*L/2
-            po[node_b*dof+2] += dl*L**2/12*cos
+            po[node_a*3+1] += -dl*L/2
+            po[node_a*3+2] += -dl*L**2/12*cos
+            po[node_b*3+1] += -dl*L/2
+            po[node_b*3+2] += dl*L**2/12*cos
         if bc0 == True and bc1 == False:
-            po[node_a*dof+0] += dl*cos*sin*L*3/8 - dl*cos*sin*L/2
-            po[node_a*dof+1] += -dl*cos**2*L*3/8 - dl*sin**2*L/2
-            po[node_a*dof+2] += 0
-            po[node_b*dof+0] += dl*cos*sin*L*5/8 - dl*cos*sin*L/2
-            po[node_b*dof+1] += -dl*cos**2*L*5/8 - dl*sin**2*L/2
-            po[node_b*dof+2] += dl*cos*L**2/8
+            po[node_a*3+0] += dl*cos*sin*L*3/8 - dl*cos*sin*L/2
+            po[node_a*3+1] += -dl*cos**2*L*3/8 - dl*sin**2*L/2
+            po[node_a*3+2] += 0
+            po[node_b*3+0] += dl*cos*sin*L*5/8 - dl*cos*sin*L/2
+            po[node_b*3+1] += -dl*cos**2*L*5/8 - dl*sin**2*L/2
+            po[node_b*3+2] += dl*cos*L**2/8
         if bc0 == False and bc1 == True:
-            po[node_a*dof+0] += dl*cos*sin*L*5/8 - dl*cos*sin*L/2
-            po[node_a*dof+1] += -dl*cos**2*L*5/8 - dl*sin**2*L/2
-            po[node_a*dof+2] += -dl*cos*L**2/8
-            po[node_b*dof+0] += dl*cos*sin*L*3/8 - dl*cos*sin*L/2
-            po[node_b*dof+1] += -dl*cos**2*L*3/8 - dl*sin**2*L/2
-            po[node_b*dof+2] += 0
+            po[node_a*3+0] += dl*cos*sin*L*5/8 - dl*cos*sin*L/2
+            po[node_a*3+1] += -dl*cos**2*L*5/8 - dl*sin**2*L/2
+            po[node_a*3+2] += -dl*cos*L**2/8
+            po[node_b*3+0] += dl*cos*sin*L*3/8 - dl*cos*sin*L/2
+            po[node_b*3+1] += -dl*cos**2*L*3/8 - dl*sin**2*L/2
+            po[node_b*3+2] += 0
         if bc0 == True and bc1 == True:
-            po[node_a*dof+1] += -dl*L/2
-            po[node_b*dof+1] += -dl*L/2    
-        pZeros[0] = po           
-        return pZeros
+            po[node_a*3+1] += -dl*L/2
+            po[node_b*3+1] += -dl*L/2    
+       
+        return po
 
     def __str__(self):
         return str(self.pk)
