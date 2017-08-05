@@ -16,14 +16,14 @@ def get_object_or_none(classmodel, **kwargs):
     except classmodel.DoesNotExist:
         return None
 
-def get_type_by_string(item_type):
-    if item_type == 'node':
+def get_type_by_string(object_type):
+    if object_type == 'node':
         return Node, NodeForm
-    elif item_type == 'section':
+    elif object_type == 'section':
         return Section, SectionForm
-    elif item_type == 'element':
+    elif object_type == 'element':
         return Element, ElementForm
-    elif item_type == 'load':
+    elif object_type == 'load':
         return ConcentratedLoad, ConcentratedLoadForm
     else:
         return None, None
@@ -40,26 +40,9 @@ def shear(request):
 def axial(request):
     return home(request, dt=Solver(request.user).solve(3))
 
-def home(request, dt = [], node_pk = None, section_pk = None):
+def home(request, dt = [], node_pk = None, section_pk = None, element_pk = None, concentrated_load_pk = None):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
-
-    #forms
-    if request.user.is_authenticated and request.method == "POST":
-
-        sectionForm = SectionForm(request.POST)
-        elementForm = ElementForm(request.POST)
-        loadForm = ConcentratedLoadForm(request.POST)
-
-        
-        if request.POST.get('element') != None and elementForm.is_valid():
-            item = ElementForm(request.POST).save(commit=False)
-            item.author = request.user
-            item.save()
-        elif request.POST.get('load') != None and loadForm.is_valid():
-            item = ConcentratedLoadForm(request.POST).save(commit=False)
-            item.author = request.user
-            item.save()
 
     #entries
     if request.user.is_authenticated:
@@ -100,6 +83,18 @@ def home(request, dt = [], node_pk = None, section_pk = None):
         sectionForm = SectionForm(instance = edited_section)
     else:
         sectionForm = SectionForm()
+
+    edited_element = get_object_or_none(Element, pk=element_pk)
+    if edited_element != None:
+        elementForm = ElementForm(instance = edited_element)
+    else:
+        elementForm = ElementForm()
+
+    edited_concentrated_load = get_object_or_none(ConcentratedLoad, pk=element_pk)
+    if edited_concentrated_load != None:
+        concentratedLoadForm = ConcentratedLoadForm(instance = edited_concentrated_load)
+    else:
+        concentratedLoadForm = ConcentratedLoadForm()
     
     #response
     return render(request, 'app/index.html', 
@@ -109,42 +104,54 @@ def home(request, dt = [], node_pk = None, section_pk = None):
             'nodes':nodes,
             'sections':sections,
             'elements':elements,
-            'loads':loads,
+            'concentrated_loads':loads,
             'nodeForm':nodeForm,
             'emptyNodeForm':NodeForm(),
             'sectionForm':sectionForm,
             'emptySectionForm':SectionForm(),
-            'elementForm':ElementForm(),
-            'loadForm':ConcentratedLoadForm(),
+            'elementForm':elementForm,
+            'emptyElementForm':ElementForm(),
+            'concentratedLoadForm':concentratedLoadForm,
+            'emptyConcentratedLoadForm':ConcentratedLoadForm(),
             'chartData':json.dumps(chart_data),
         })
 
 def item_delete(request, item_type, pk):
-    item_type, associated_form = get_type_by_string(item_type)
-    if item_type != None:
-        get_object_or_404(item_type, pk=pk).delete()
+    object_type, associated_form = get_type_by_string(item_type)
+    if object_type != None:
+        get_object_or_404(object_type, pk=pk).delete()
     return redirect('/')
 
 def item_new(request, item_type):
-    item_type, associated_form = get_type_by_string(item_type)
-    if item_type != None and associated_form != None and request.user.is_authenticated and request.method == "POST":
+    object_type, associated_form = get_type_by_string(item_type)
+    if object_type != None and associated_form != None and request.user.is_authenticated and request.method == "POST":
         if associated_form(request.POST).is_valid():
             item = associated_form(request.POST).save(commit=False)
             item.author = request.user
             item.save()
     return redirect('/')
 
-def node_edit(request, pk):
-    if request.user.is_authenticated and request.method == "POST":
-        nodeForm = NodeForm(request.POST)
-        if request.POST.get('edit_node') != None and nodeForm.is_valid():
-            edited = get_object_or_none(Node, pk=pk)
+def item_edit(request, item_type, pk):
+    object_type, associated_form = get_type_by_string(item_type)
+    if object_type != None and associated_form != None and request.user.is_authenticated and request.method == "POST":
+        if associated_form(request.POST).is_valid():
+            edited = get_object_or_none(object_type, pk=pk)
             if edited != None:
-                item = NodeForm(request.POST, instance = edited).save(commit=False)
+                item = associated_form(request.POST, instance = edited).save(commit=False)
                 item.author = request.user
                 item.save()
                 return redirect('/')
-    return home(request, node_pk = pk)
+
+    if item_type == 'node':
+        return home(request, node_pk = pk)
+    elif item_type == 'section':
+        return home(request, section_pk = pk)
+    elif item_type == 'element':
+        return home(request, element_pk = pk)
+    elif item_type == 'load':
+        return home(request, concentrated_load_pk = pk)
+    else:
+        return redirect('/')
 
 def contact(request):
     """Renders the contact page."""

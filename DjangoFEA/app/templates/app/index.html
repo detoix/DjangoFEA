@@ -42,33 +42,33 @@
                     <td>{{ node.y_boundary_condition|yesno:"X,O" }}</td>
                     <td>{{ node.fi_boundary_condition|yesno:"X,O" }}</td>
                     <td class="display-flex">
-                        <a class="save btn btn-default btn-sm" href="{% url 'node_edit' pk=node.pk %}">Edit</a>
+                        <a class="save btn btn-default btn-sm" href="{% url 'item_edit' item_type='node' pk=node.pk %}">Edit</a>
                         <a class="save btn btn-default btn-sm" href="{% url 'item_delete' item_type='node' pk=node.pk %}">-</a>
                     </td>
                 </tr>   
-                    {% if nodeForm.instance == node  %}
-                        <tr>
-                            <form method="POST" action="{% url 'node_edit' pk=node.pk %}" class="form" id="node-form">{% csrf_token %}
-                                <td>{{ nodeForm.x }}</td>
-                                <td>{{ nodeForm.y }}</td>
-                                <td>{{ nodeForm.x_boundary_condition }}</td>
-                                <td>{{ nodeForm.y_boundary_condition }}</td>
-                                <td>{{ nodeForm.fi_boundary_condition }}</td>
-                                <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="edit_node"> Commit </button></td>
-                            </form>
-                        </tr>
-                    {% endif %}
+                {% if nodeForm.instance == node  %}
+                <tr>
+                    <form method="POST" action="{% url 'item_edit' item_type='node' pk=node.pk %}" class="form" id="node-form">{% csrf_token %}
+                        <td>{{ nodeForm.x }}</td>
+                        <td>{{ nodeForm.y }}</td>
+                        <td>{{ nodeForm.x_boundary_condition }}</td>
+                        <td>{{ nodeForm.y_boundary_condition }}</td>
+                        <td>{{ nodeForm.fi_boundary_condition }}</td>
+                        <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="edit_node"> Commit </button></td>
+                    </form>
+                </tr>
+                {% endif %}
                 {% endfor %}
-                        <tr>
-                            <form method="POST" action="{% url 'item_new' item_type='node' %}" class="form" id="empty-node-form">{% csrf_token %}
-                                <td>{{ emptyNodeForm.x }}</td>
-                                <td>{{ emptyNodeForm.y }}</td>
-                                <td>{{ emptyNodeForm.x_boundary_condition }}</td>
-                                <td>{{ emptyNodeForm.y_boundary_condition }}</td>
-                                <td>{{ emptyNodeForm.fi_boundary_condition }}</td>
-                                <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="new_node"> + </button></td>
-                            </form>
-                        </tr>
+                <tr>
+                    <form method="POST" action="{% url 'item_new' item_type='node' %}" class="form" id="empty-node-form">{% csrf_token %}
+                        <td>{{ emptyNodeForm.x }}</td>
+                        <td>{{ emptyNodeForm.y }}</td>
+                        <td>{{ emptyNodeForm.x_boundary_condition }}</td>
+                        <td>{{ emptyNodeForm.y_boundary_condition }}</td>
+                        <td>{{ emptyNodeForm.fi_boundary_condition }}</td>
+                        <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="new_node"> + </button></td>
+                    </form>
+                </tr>
             </table>
         </div>
     </div>
@@ -91,18 +91,30 @@
                     <td>{{ section.J }}</td>
                     <td>{{ section.ro }}</td>
                     <td class="display-flex">
-                        <a class="save btn btn-default btn-sm" href="{% url 'item_delete' item_type='section' pk=section.pk %}">Edit</a>
+                        <a class="save btn btn-default btn-sm" href="{% url 'item_edit' item_type='section' pk=section.pk %}">Edit</a>
                         <a class="save btn btn-default btn-sm" href="{% url 'item_delete' item_type='section' pk=section.pk %}">-</a>
                     </td>
-                </tr>            
-                {% endfor %}
+                </tr>        
+                {% if sectionForm.instance == section %}
                 <tr>
-                    <form method="POST" class="form" id="section-form">{% csrf_token %}
+                    <form method="POST" action="{% url 'item_edit' item_type='section' pk=section.pk %}" class="form" id="section-form">{% csrf_token %}
                         <td></td>
                         <td>{{ sectionForm.E }}</td>
                         <td>{{ sectionForm.A }}</td>
                         <td>{{ sectionForm.J }}</td>
                         <td>{{ sectionForm.ro }}</td>
+                        <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="section"> Commit </button></td>
+                    </form>
+                </tr>
+                {% endif %}
+                {% endfor %}
+                <tr>
+                    <form method="POST" action="{% url 'item_new' item_type='section' %}" class="form" id="empty-section-form">{% csrf_token %}
+                        <td></td>
+                        <td>{{ emptySectionForm.E }}</td>
+                        <td>{{ emptySectionForm.A }}</td>
+                        <td>{{ emptySectionForm.J }}</td>
+                        <td>{{ emptySectionForm.ro }}</td>
                         <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="section"> + </button></td>
                     </form>
                 </tr>
@@ -127,19 +139,32 @@
                     <td>{{ element.hinge_start|yesno:"X,O" }}</td>
                     <td>{{ element.hinge_end|yesno:"X,O" }}</td>
                     <td class="display-flex">
-                        <a class="save btn btn-default btn-sm" href="{% url 'item_delete' item_type='section' pk=element.pk %}">Edit</a>
+                        <a class="save btn btn-default btn-sm" href="{% url 'item_edit' item_type='element' pk=element.pk %}">Edit</a>
                         <a class="save btn btn-default btn-sm" href="{% url 'item_delete' item_type='element' pk=element.pk %}">-</a>
                     </td>
-                </tr>            
-                {% endfor %}
+                </tr>        
+                {% if elementForm.instance == element %}
                 <tr>
-                    <form method="POST" class="form" id="element-form">{% csrf_token %}
+                    <form method="POST" action="{% url 'item_edit' item_type='element' pk=element.pk %}" class="form" id="element-form">{% csrf_token %}
                         <td></td>
                         <td>{{ elementForm.section }}</td>
                         <td>{{ elementForm.node_start }}</td>
                         <td>{{ elementForm.node_end }}</td>
                         <td>{{ elementForm.hinge_start }}</td>
                         <td>{{ elementForm.hinge_end }}</td>
+                        <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="element"> Commit </button></td>
+                    </form>
+                </tr>
+                {% endif %}
+                {% endfor %}
+                <tr>
+                    <form method="POST" action="{% url 'item_new' item_type='element' %}" class="form" id="empty-element-form">{% csrf_token %}
+                        <td></td>
+                        <td>{{ emptyElementForm.section }}</td>
+                        <td>{{ emptyElementForm.node_start }}</td>
+                        <td>{{ emptyElementForm.node_end }}</td>
+                        <td>{{ emptyElementForm.hinge_start }}</td>
+                        <td>{{ emptyElementForm.hinge_end }}</td>
                         <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="element"> + </button></td>
                     </form>
                 </tr>
@@ -157,26 +182,38 @@
                     <th>M|kNm</th>
                     <th>deg|<sup>o</sup></th>
                 </tr>
-                {% for load in loads %}
+                {% for concentrated_load in concentrated_loads %}
                 <tr>
-                    <td>{{ load.associated_element }}</td>
-                    <td>{{ load.f1 }}</td>
-                    <td>{{ load.coord1 }}</td>
-                    <td>{{ load.m }}</td>
-                    <td>{{ load.deg }}</td>
+                    <td>{{ concentrated_load.associated_element }}</td>
+                    <td>{{ concentrated_load.f1 }}</td>
+                    <td>{{ concentrated_load.coord1 }}</td>
+                    <td>{{ concentrated_load.m }}</td>
+                    <td>{{ concentrated_load.deg }}</td>
                     <td class="display-flex">
-                        <a class="save btn btn-default btn-sm" href="{% url 'item_delete' item_type='section' pk=load.pk %}">Edit</a>
-                        <a class="save btn btn-default btn-sm" href="{% url 'item_delete' item_type='load' pk=load.pk %}">-</a>
+                        <a class="save btn btn-default btn-sm" href="{% url 'item_edit' item_type='concentrated_load' pk=concentrated_load.pk %}">Edit</a>
+                        <a class="save btn btn-default btn-sm" href="{% url 'item_delete' item_type='concentrated_load' pk=concentrated_load.pk %}">-</a>
                     </td>
-                </tr>            
+                </tr>   
+                {% if loadForm.instance == concentrated_load %}
+                <tr>
+                    <form method="POST" action="{% url 'item_edit' item_type='concentrated_load' pk=concentrated_load.pk %}" class="form" id="concentrated-load-form">{% csrf_token %}
+                        <td>{{ concentratedLoadForm.associated_element }}</td>
+                        <td>{{ concentratedLoadForm.f1 }}</td>
+                        <td>{{ concentratedLoadForm.coord1 }}</td>
+                        <td>{{ concentratedLoadForm.m }}</td>
+                        <td>{{ concentratedLoadForm.deg }}</td>
+                        <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="load"> Commit </button></td>
+                    </form>
+                </tr>
+                {% endif %}
                 {% endfor %}
                 <tr>
-                    <form method="POST" class="form" id="load-form">{% csrf_token %}
-                        <td>{{ loadForm.associated_element }}</td>
-                        <td>{{ loadForm.f1 }}</td>
-                        <td>{{ loadForm.coord1 }}</td>
-                        <td>{{ loadForm.m }}</td>
-                        <td>{{ loadForm.deg }}</td>
+                    <form method="POST" action="{% url 'item_new' item_type='concentrated_load' %}" class="form" id="empty-concentrated-load-form">{% csrf_token %}
+                        <td>{{ emptyConcentratedLoadForm.associated_element }}</td>
+                        <td>{{ emptyConcentratedLoadForm.f1 }}</td>
+                        <td>{{ emptyConcentratedLoadForm.coord1 }}</td>
+                        <td>{{ emptyConcentratedLoadForm.m }}</td>
+                        <td>{{ emptyConcentratedLoadForm.deg }}</td>
                         <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="load"> + </button></td>
                     </form>
                 </tr>
