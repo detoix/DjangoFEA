@@ -24,8 +24,7 @@ class ConcentratedLoad(Load):
             and set appropriate values of angles and loads,
         4. fill po matrix with values.
         '''
-
-    def bc(self, po):
+    def append_to_force_matrix(self, po):
         x1 = self.associated_element.node_start.x
         y1 = self.associated_element.node_start.y
         x2 = self.associated_element.node_end.x
@@ -107,13 +106,9 @@ class ConcentratedLoad(Load):
             po[node_b*3] += -sin*Mz/L
             po[node_b*3+1] += cos*Mz/L
             po[node_b*3+2] += 0
-
         return po
 
-
-    def dis_loads(self, i):
-        num_of_calc = 100
-
+    def calculate_deflection_in_point(self, i):
         #initial data
         item = self.associated_element
         x1 = self.associated_element.node_start.x
@@ -194,6 +189,185 @@ class ConcentratedLoad(Load):
             
         return dx_cl, dy_cl + dy_hin  
 
+    def calculate_bending_in_point(self, i):
+        #initial data
+        item = self.associated_element
+        x1 = self.associated_element.node_start.x
+        y1 = self.associated_element.node_start.y
+        x2 = self.associated_element.node_end.x
+        y2 = self.associated_element.node_end.y      
+        L = math.sqrt ((x2 - x1) **2 + (y2 - y1) **2)
+
+        bc0 = self.associated_element.hinge_start
+        bc1 = self.associated_element.hinge_end
+
+        E = self.associated_element.section.E*100000000
+        A = self.associated_element.section.A/10000
+        J = self.associated_element.section.J/100000000
+
+        zeta = i/L
+            
+        #displacements for clamped beam
+        dy_cl = 0
+        dy_hin = 0
+
+        angle = self.deg*math.pi/180                   
+        F = math.cos(angle)*self.f1  
+        Mz = self.m
+        a = self.coord1*L                                   
+        b = L-a   
+        if i <= a:
+            #concentrated force
+            dy_cl += - F * (a*(b**2)) / (L**2) + F*(b**2)*i / (L**3) * (L+2*a)
+            #concentrated moment
+            dy_cl += - Mz/L**2*(3*b**2-2*b*L) - (6*Mz*b)/L**3*(L-b)*i
+        else:
+            #concentrated force
+            dy_cl += - F * (a*(b**2)) / (L**2) + F*(b**2)*i / (L**3) * (L+2*a) - F*(i-a)
+            #concentrated moment
+            dy_cl += - Mz/L**2*(3*b**2-2*b*L) - (6*Mz*b)/L**3*(L-b)*i + Mz
+        #in case load on bar with hinges
+        if bc0 == False and bc1 == True:
+            #concentrated force
+            V5 = 6*i/(L**2)-2/L 
+            v_add = -math.cos(ld.angle_var.get()*math.pi/180)*ld.F_var.get()*(L**2)*(ld.coord_var.get()**2)*(1-ld.coord_var.get())/(4*E*J)
+            dy_hin += v_add*V5*E*J
+            #concentrated moment
+            v_add = -Mz*(b-L/4-3/4*b**2/L)
+            dy_hin += v_add*V5
+        elif bc0 == True and bc1 == False:
+            V5 = 6*i/(L**2)-4/L 
+            #concentrated force
+            v_add = math.cos(ld.angle_var.get()*math.pi/180)*ld.F_var.get()*(L**2)*ld.coord_var.get()*(1-ld.coord_var.get())**2/(4*E*J)
+            dy_hin += v_add*V5*E*J
+            #concentrated moment
+            v_add = -Mz*(a-L/4-3/4*a**2/L)
+            dy_hin += v_add*V5
+        elif bc0 == True and bc1 == True:
+            #concentrated force
+            V5 = 6*i/(L**2)-4/L
+            v_add = math.cos(ld.angle_var.get()*math.pi/180)*ld.F_var.get()*b*(L**2-b**2)/(6*L*E*J)
+            dy_hin += v_add*V5*E*J
+            v_add = math.cos(ld.angle_var.get()*math.pi/180)*ld.F_var.get()*a*b*(2*L-b)/(6*L*E*J)
+            V5 = 6*i/(L**2)-2/L 
+            dy_hin += - v_add*V5*E*J
+            #concentrated moment
+            V5 = 6*i/(L**2)-4/L
+            v_add = Mz/(6)*(2*L-6*a+3*a**2/L)
+            dy_hin += v_add*V5
+            v_add = Mz/(6)*(L-3*a**2/L)
+            V5 = 6*i/(L**2)-2/L 
+            dy_hin += -v_add*V5
+
+        return (-dy_cl + dy_hin)
+
+    def calculate_shear_in_point(self, i):
+        #initial data
+        item = self.associated_element
+        x1 = self.associated_element.node_start.x
+        y1 = self.associated_element.node_start.y
+        x2 = self.associated_element.node_end.x
+        y2 = self.associated_element.node_end.y      
+        L = math.sqrt ((x2 - x1) **2 + (y2 - y1) **2)
+
+        bc0 = self.associated_element.hinge_start
+        bc1 = self.associated_element.hinge_end
+
+        E = self.associated_element.section.E*100000000
+        A = self.associated_element.section.A/10000
+        J = self.associated_element.section.J/100000000
+
+        zeta = i/L
+            
+        #displacements for clamped beam
+        dy_cl = 0
+        dy_hin = 0
+
+        angle = self.deg*math.pi/180                   
+        F = math.cos(angle)*self.f1  
+        Mz = self.m
+        a = self.coord1*L                                   
+        b = L-a   
+        if i <= a:
+            #concentrated force
+            dy_cl += - F*(b**2) / (L**3) * (L+2*a)
+            #concentrated moment
+            dy_cl += (6*Mz*b)/L**3*(L-b)
+        else:
+            #concentrated force
+            dy_cl += - F*(b**2) / (L**3) * (L+2*a) + F  
+            #concentrated moment
+            dy_cl += (6*Mz*b)/L**3*(L-b)
+        #in case load on bar with hinges
+        if bc0 == False and bc1 == True:
+            #concentrated force
+            V5 = 6/(L**2)
+            v_add = -math.cos(ld.angle_var.get()*math.pi/180)*ld.F_var.get()*(L**2)*(ld.coord_var.get()**2)*(1-ld.coord_var.get())/(4*E*J)
+            dy_hin += - v_add*V5*E*J
+            #concentrated moment
+            v_add = Mz*(b-L/4-3/4*b**2/L)
+            dy_hin += v_add*V5
+        elif bc0 == True and bc1 == False:
+            V5 = 6/(L**2)
+            #concentrated force
+            v_add = -math.cos(ld.angle_var.get()*math.pi/180)*ld.F_var.get()*(L**2)*ld.coord_var.get()*(1-ld.coord_var.get())**2/(4*E*J)
+            dy_hin += v_add*V5*E*J
+            #concentrated moment
+            v_add = Mz*(a-L/4-3/4*a**2/L)
+            dy_hin += v_add*V5
+        elif bc0 == True and bc1 == True:
+            #concentrated force
+            V5 = 6/(L**2)
+            v_add = -math.cos(ld.angle_var.get()*math.pi/180)*ld.F_var.get()*b*(L**2-b**2)/(6*L*E*J)
+            dy_hin += v_add*V5*E*J
+            v_add = -math.cos(ld.angle_var.get()*math.pi/180)*ld.F_var.get()*a*b*(2*L-b)/(6*L*E*J)
+            V5 = 6/(L**2)
+            dy_hin += - v_add*V5*E*J
+            #concentrated moment
+            V5 = 6/(L**2)
+            v_add = -Mz/(6)*(2*L-6*a+3*a**2/L)
+            dy_hin += v_add*V5
+            v_add = -Mz/(6)*(L-3*a**2/L)
+            V5 = 6/(L**2)
+            dy_hin += -v_add*V5
+
+        return (-dy_cl + dy_hin)
+
+    def calculate_axial_in_point(self, i):
+        #initial data
+        item = self.associated_element
+        x1 = self.associated_element.node_start.x
+        y1 = self.associated_element.node_start.y
+        x2 = self.associated_element.node_end.x
+        y2 = self.associated_element.node_end.y      
+        L = math.sqrt ((x2 - x1) **2 + (y2 - y1) **2)
+
+        bc0 = self.associated_element.hinge_start
+        bc1 = self.associated_element.hinge_end
+
+        E = self.associated_element.section.E*100000000
+        A = self.associated_element.section.A/10000
+        J = self.associated_element.section.J/100000000
+
+        zeta = i/L
+            
+        #displacements for clamped beam
+        dy_cl = 0
+        dy_hin = 0
+
+        angle = self.deg*math.pi/180                   
+        Fx = math.sin(angle)*self.f1  
+        Mz = self.m
+        a = self.coord1*L                                   
+        b = L-a   
+        if i <= a:
+            #concentrated force
+            dy_cl += - Fx*(L-a)/L
+        else:
+            #concentrated force
+            dy_cl += Fx*a/L
+
+        return (-dy_cl + dy_hin)
 
 class DistributedLoad(Load):
     def __str__(self):

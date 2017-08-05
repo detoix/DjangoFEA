@@ -16,6 +16,13 @@
 
 <div class="jumbotron">
     <canvas id="model_chart"></canvas>
+    <div class="btn-group btn-group-justified" role="group" aria-label="...">
+        <a class="save btn btn-default btn-sm" href="{% url 'home' %}">Model</a>
+        <a class="save btn btn-default btn-sm" href="{% url 'deflection' %}">Deflection</a>
+        <a class="save btn btn-default btn-sm" href="{% url 'bending' %}">Bending</a>
+        <a class="save btn btn-default btn-sm" href="{% url 'shear' %}">Shear</a>
+        <a class="save btn btn-default btn-sm" href="{% url 'axial' %}">Axial</a>
+    </div>
 </div>
 
 <div class="row">
@@ -35,21 +42,33 @@
                     <td>{{ node.y_boundary_condition|yesno:"X,O" }}</td>
                     <td>{{ node.fi_boundary_condition|yesno:"X,O" }}</td>
                     <td class="display-flex">
-                        <a class="save btn btn-default btn-sm" href="{% url 'node_delete' pk=node.pk %}">Edit</a>
-                        <a class="save btn btn-default btn-sm" href="{% url 'node_delete' pk=node.pk %}">-</a>
+                        <a class="save btn btn-default btn-sm" href="{% url 'node_edit' pk=node.pk %}">Edit</a>
+                        <a class="save btn btn-default btn-sm" href="{% url 'item_delete' item_type='node' pk=node.pk %}">-</a>
                     </td>
-                </tr>            
+                </tr>   
+                    {% if nodeForm.instance == node  %}
+                        <tr>
+                            <form method="POST" action="{% url 'node_edit' pk=node.pk %}" class="form" id="node-form">{% csrf_token %}
+                                <td>{{ nodeForm.x }}</td>
+                                <td>{{ nodeForm.y }}</td>
+                                <td>{{ nodeForm.x_boundary_condition }}</td>
+                                <td>{{ nodeForm.y_boundary_condition }}</td>
+                                <td>{{ nodeForm.fi_boundary_condition }}</td>
+                                <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="edit_node"> Commit </button></td>
+                            </form>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
-                <tr>
-                    <form method="POST" class="form" id="node-form">{% csrf_token %}
-                        <td>{{ nodeForm.x }}</td>
-                        <td>{{ nodeForm.y }}</td>
-                        <td>{{ nodeForm.x_boundary_condition }}</td>
-                        <td>{{ nodeForm.y_boundary_condition }}</td>
-                        <td>{{ nodeForm.fi_boundary_condition }}</td>
-                        <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="node"> + </button></td>
-                    </form>
-                </tr>
+                        <tr>
+                            <form method="POST" action="{% url 'item_new' item_type='node' %}" class="form" id="empty-node-form">{% csrf_token %}
+                                <td>{{ emptyNodeForm.x }}</td>
+                                <td>{{ emptyNodeForm.y }}</td>
+                                <td>{{ emptyNodeForm.x_boundary_condition }}</td>
+                                <td>{{ emptyNodeForm.y_boundary_condition }}</td>
+                                <td>{{ emptyNodeForm.fi_boundary_condition }}</td>
+                                <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="new_node"> + </button></td>
+                            </form>
+                        </tr>
             </table>
         </div>
     </div>
@@ -72,8 +91,8 @@
                     <td>{{ section.J }}</td>
                     <td>{{ section.ro }}</td>
                     <td class="display-flex">
-                        <a class="save btn btn-default btn-sm" href="{% url 'section_delete' pk=section.pk %}">Edit</a>
-                        <a class="save btn btn-default btn-sm" href="{% url 'section_delete' pk=section.pk %}">-</a>
+                        <a class="save btn btn-default btn-sm" href="{% url 'item_delete' item_type='section' pk=section.pk %}">Edit</a>
+                        <a class="save btn btn-default btn-sm" href="{% url 'item_delete' item_type='section' pk=section.pk %}">-</a>
                     </td>
                 </tr>            
                 {% endfor %}
@@ -108,8 +127,8 @@
                     <td>{{ element.hinge_start|yesno:"X,O" }}</td>
                     <td>{{ element.hinge_end|yesno:"X,O" }}</td>
                     <td class="display-flex">
-                        <a class="save btn btn-default btn-sm" href="{% url 'element_delete' pk=element.pk %}">Edit</a>
-                        <a class="save btn btn-default btn-sm" href="{% url 'element_delete' pk=element.pk %}">-</a>
+                        <a class="save btn btn-default btn-sm" href="{% url 'item_delete' item_type='section' pk=element.pk %}">Edit</a>
+                        <a class="save btn btn-default btn-sm" href="{% url 'item_delete' item_type='element' pk=element.pk %}">-</a>
                     </td>
                 </tr>            
                 {% endfor %}
@@ -146,8 +165,8 @@
                     <td>{{ load.m }}</td>
                     <td>{{ load.deg }}</td>
                     <td class="display-flex">
-                        <a class="save btn btn-default btn-sm" href="{% url 'load_delete' pk=load.pk %}">Edit</a>
-                        <a class="save btn btn-default btn-sm" href="{% url 'load_delete' pk=load.pk %}">-</a>
+                        <a class="save btn btn-default btn-sm" href="{% url 'item_delete' item_type='section' pk=load.pk %}">Edit</a>
+                        <a class="save btn btn-default btn-sm" href="{% url 'item_delete' item_type='load' pk=load.pk %}">-</a>
                     </td>
                 </tr>            
                 {% endfor %}

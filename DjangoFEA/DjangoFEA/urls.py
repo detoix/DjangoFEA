@@ -12,20 +12,23 @@ import app.views
 # Uncomment the next lines to enable the admin:
 from django.conf.urls import include
 from django.contrib import admin
-from app.models import Node
+from app.models import Node, Section, Element, ConcentratedLoad
 
 admin.autodiscover()
 admin.site.register(Node)
+admin.site.register(Section)
+admin.site.register(Element)
+admin.site.register(ConcentratedLoad)
 
 urlpatterns = [
     url(r'^$', app.views.home, name='home'),
-    #url(r'^node/(?P<pk>[0-9]+)/edit/$', app.views.home, name='node_edit'),
-    #url(r'^node/(?P<pk>[0-9]+)/edit/$', app.views.node_edit, name='node_edit'),
-    #url(r'^element/(?P<pk>[0-9]+)/edit/$', app.views.element_edit, name='element_edit'),
-    url(r'^node/(?P<pk>[0-9]+)/delete/$', app.views.node_delete, name='node_delete'),
-    url(r'^section/(?P<pk>[0-9]+)/delete/$', app.views.section_delete, name='section_delete'),
-    url(r'^element/(?P<pk>[0-9]+)/delete/$', app.views.element_delete, name='element_delete'),
-    url(r'^load/(?P<pk>[0-9]+)/delete/$', app.views.load_delete, name='load_delete'),
+    url(r'^deflection', app.views.deflection, name='deflection'),
+    url(r'^bending', app.views.bending, name='bending'),
+    url(r'^shear', app.views.shear, name='shear'),
+    url(r'^axial', app.views.axial, name='axial'),
+    url(r'^(?P<item_type>[\w\-]+)/new/$', app.views.item_new, name='item_new'),
+    url(r'^node/(?P<pk>[0-9]+)/edit/$', app.views.node_edit, name='node_edit'),
+    url(r'^/(?P<item_type>[\w\-]+)/(?P<pk>[0-9]+)/delete/$', app.views.item_delete, name='item_delete'),
     url(r'^contact$', app.views.contact, name='contact'),
     url(r'^about', app.views.about, name='about'),
     url(r'^login/$',
