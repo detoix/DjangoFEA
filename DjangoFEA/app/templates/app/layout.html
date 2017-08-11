@@ -7,9 +7,10 @@
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js"></script>
 </head>
 
-<body>
+<body ng-app="djangofea">
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -38,12 +39,12 @@
             <p>&copy; {{ year }} - DjangoFEA</p>
         </footer>
     </div>
-
     <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
     <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
     <script src="{% static 'app/scripts/respond.js' %}"></script>
     <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
-    <!--<script src="{% static 'app/scripts/ajax.js' %}"></script>-->
+    <script src="{% static 'app/scripts/angular.js' %}"></script>
+    <script src="{% static 'app/directives/node.directive.js' %}"></script>
     <script src="{% static 'js/Chart.min.js' %}"></script>
     {% block scripts %}{% endblock %}
 </body>
