@@ -30,6 +30,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="app\api.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\forms.py" />
     <Compile Include="app\models\data_item.py">
       <SubType>Code</SubType>
@@ -50,6 +53,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="app\models\__init__.py" />
+    <Compile Include="app\serializers.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\tests.py" />
     <Compile Include="app\views.py" />
     <Compile Include="app\__init__.py" />
@@ -64,6 +70,7 @@
     <Folder Include="app\" />
     <Folder Include="app\migrations\" />
     <Folder Include="app\models\" />
+    <Folder Include="app\static\app\directives\" />
     <Folder Include="app\static\" />
     <Folder Include="app\static\app\" />
     <Folder Include="app\static\app\content\" />
@@ -94,7 +101,10 @@
     <Folder Include="static\js\highcharts\themes\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\static\app\directives\node.directive.js" />
+    <Content Include="app\static\app\directives\node.html" />
     <Content Include="app\static\app\scripts\ajax.js" />
+    <Content Include="app\static\app\scripts\angular.js" />
     <Content Include="DjangoFEA\__pycache__\settings.cpython-36.pyc" />
     <Content Include="DjangoFEA\__pycache__\urls.cpython-36.pyc" />
     <Content Include="DjangoFEA\__pycache__\wsgi.cpython-36.pyc" />

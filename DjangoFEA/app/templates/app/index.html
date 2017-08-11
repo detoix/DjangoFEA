@@ -9,7 +9,7 @@
         var chart = new Chart(modelChart,
         {
             type: 'scatter',
-            data: {{ chartData|safe  }},
+            data: {{ chartData|safe }},
         })
     }
 </script>
@@ -28,24 +28,27 @@
 <div class="row">
     <div class="col-md-3">
         <h2>Nodes</h2>
-        <div class="post" id="nodes">
+        <div class="post" id="nodes" ng-controller="Controller">
             <table>
                 <tr>
                     <th>X|m</th>
                     <th>Y|m</th>
                 </tr>
-                {% for node in nodes %}
+                {% verbatim %}
+                <tr node ng-repeat="node in nodes"></tr>
                 <tr>
-                    <td>{{ node.x }}</td>
-                    <td>{{ node.y }}</td>
-                    <td>{{ node.x_boundary_condition|yesno:"X,O" }}</td>
-                    <td>{{ node.y_boundary_condition|yesno:"X,O" }}</td>
-                    <td>{{ node.fi_boundary_condition|yesno:"X,O" }}</td>
-                    <td class="display-flex">
-                        <a class="save btn btn-default btn-sm" href="{% url 'item_edit' item_type='node' pk=node.pk %}">Edit</a>
-                        <a class="save btn btn-default btn-sm" href="{% url 'item_delete' item_type='node' pk=node.pk %}">-</a>
-                    </td>
-                </tr>   
+                    <form method="POST" class="form" id="empty-node-form">{% endverbatim %}{% csrf_token %}{% verbatim %}
+                        <td><input type="number" ng-model="x" /></td>
+                        <td><input type="number" ng-model="y" /></td>
+                        <td><input type="checkbox" ng-model="x_boundary_condition" /></td>
+                        <td><input type="checkbox" ng-model="y_boundary_condition" /></td>
+                        <td><input type="checkbox" ng-model="fi_boundary_condition" /></td>
+                        <td><button ng-click="add_node(nodes)" class="save btn btn-default btn-sm btn-block" name="new_node"> + </button></td>
+                    </form>
+                </tr>
+                {% endverbatim %}
+
+                {% for node in nodes %}
                 {% if nodeForm.instance == node  %}
                 <tr>
                     <form method="POST" action="{% url 'item_edit' item_type='node' pk=node.pk %}" class="form" id="node-form">{% csrf_token %}
@@ -59,7 +62,7 @@
                 </tr>
                 {% endif %}
                 {% endfor %}
-                <tr>
+                <!--<tr>
                     <form method="POST" action="{% url 'item_new' item_type='node' %}" class="form" id="empty-node-form">{% csrf_token %}
                         <td>{{ emptyNodeForm.x }}</td>
                         <td>{{ emptyNodeForm.y }}</td>
@@ -68,7 +71,7 @@
                         <td>{{ emptyNodeForm.fi_boundary_condition }}</td>
                         <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="new_node"> + </button></td>
                     </form>
-                </tr>
+                </tr>-->
             </table>
         </div>
     </div>

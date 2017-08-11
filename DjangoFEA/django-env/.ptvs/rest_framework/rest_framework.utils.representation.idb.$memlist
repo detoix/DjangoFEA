@@ -1,0 +1,12 @@
+list_repr
+field_repr
+unicode_literals
+force_text
+get_names_and_managers
+serializer_repr
+Promise
+models
+smart_repr
+manager_repr
+re
+unicode_repr

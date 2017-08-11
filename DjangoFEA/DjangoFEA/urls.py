@@ -13,12 +13,19 @@ import app.views
 from django.conf.urls import include
 from django.contrib import admin
 from app.models import Node, Section, Element, ConcentratedLoad
+from app.api import NodeViewSet, SectionApi, ElementApi, ConcentratedLoadApi
+from django.views.generic import TemplateView
 
 admin.autodiscover()
 admin.site.register(Node)
 admin.site.register(Section)
 admin.site.register(Element)
 admin.site.register(ConcentratedLoad)
+
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register(r'^nodes', NodeViewSet)
 
 urlpatterns = [
     url(r'^$', app.views.home, name='home'),
@@ -56,3 +63,5 @@ urlpatterns = [
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 ]
+
+urlpatterns = urlpatterns + router.urls
