@@ -28,7 +28,7 @@ class Element(DataItem):
         7. assemble Bg, Cg, Dg (global coordinates) into global stiffness matrix Ko
         '''
 
-    def assemble_stiffness_matrix(self, K0):
+    def assemble_stiffness_matrix(self, K0, nodes):
         x1 = self.node_start.x
         y1 = self.node_start.y
         x2 = self.node_end.x
@@ -104,8 +104,8 @@ class Element(DataItem):
         Dg = R*D*R.T
                         
         #assembling
-        node_a = list(Node.objects.all()).index(self.node_start)
-        node_b = list(Node.objects.all()).index(self.node_end)
+        node_a = nodes.index(self.node_start)
+        node_b = nodes.index(self.node_end)
 
         ne = node_a * 3
         ke = node_b * 3
@@ -121,15 +121,15 @@ class Element(DataItem):
         2. update global force matrix po
         '''
 
-    def append_dead_load_to_force_matrix(self, P0):
+    def append_dead_load_to_force_matrix(self, P0, nodes):
         x1 = self.node_start.x
         y1 = self.node_start.y
         x2 = self.node_end.x
         y2 = self.node_end.y      
         L = math.sqrt ((x2 - x1) **2 + (y2 - y1) **2)
             
-        node_a = list(Node.objects.all()).index(self.node_start)
-        node_b = list(Node.objects.all()).index(self.node_end)
+        node_a = nodes.index(self.node_start)
+        node_b = nodes.index(self.node_end)
         bc0 = self.hinge_start
         bc1 = self.hinge_end
                   
@@ -165,12 +165,12 @@ class Element(DataItem):
 
         return P0
 
-    def calculate_deflection(self, displacements, associated_loads):
+    def calculate_deflection(self, displacements, associated_loads, nodes):
         L = math.sqrt ((self.node_end.x - self.node_start.x) **2 + (self.node_end.y - self.node_start.y) **2)
         sin = (self.node_end.y - self.node_start.y) / L
         cos = (self.node_end.x - self.node_start.x) / L
-        node_a = list(Node.objects.all()).index(self.node_start)
-        node_b = list(Node.objects.all()).index(self.node_end)
+        node_a = nodes.index(self.node_start)
+        node_b = nodes.index(self.node_end)
 
         xy = []
         length = np.linspace(0, L, self.num_of_calc + 1)
@@ -188,7 +188,7 @@ class Element(DataItem):
             dx = x_dead + x + x_load
             dy = y_dead + y + y_load
 
-            scale = 100000
+            scale = 5
             u = self.node_start.x + ((i + dx * scale) * cos - dy * scale * sin)
             v = self.node_start.y + ((i + dx * scale) * sin + dy * scale * cos)
 
@@ -259,12 +259,12 @@ class Element(DataItem):
         
         return dx, dy
 
-    def calculate_bending(self, displacements, associated_loads):
+    def calculate_bending(self, displacements, associated_loads, nodes):
         L = math.sqrt ((self.node_end.x - self.node_start.x) **2 + (self.node_end.y - self.node_start.y) **2)
         sin = (self.node_end.y - self.node_start.y) / L
         cos = (self.node_end.x - self.node_start.x) / L
-        node_a = list(Node.objects.all()).index(self.node_start)
-        node_b = list(Node.objects.all()).index(self.node_end)
+        node_a = nodes.index(self.node_start)
+        node_b = nodes.index(self.node_end)
 
         xy = []
         length = np.linspace(0, L, self.num_of_calc + 1)
@@ -342,12 +342,12 @@ class Element(DataItem):
 
         return dy
 
-    def calculate_shear(self, displacements, associated_loads):
+    def calculate_shear(self, displacements, associated_loads, nodes):
         L = math.sqrt ((self.node_end.x - self.node_start.x) **2 + (self.node_end.y - self.node_start.y) **2)
         sin = (self.node_end.y - self.node_start.y) / L
         cos = (self.node_end.x - self.node_start.x) / L
-        node_a = list(Node.objects.all()).index(self.node_start)
-        node_b = list(Node.objects.all()).index(self.node_end)
+        node_a = nodes.index(self.node_start)
+        node_b = nodes.index(self.node_end)
 
         xy = []
         length = np.linspace(0, L, self.num_of_calc + 1)
@@ -429,8 +429,8 @@ class Element(DataItem):
         L = math.sqrt ((self.node_end.x - self.node_start.x) **2 + (self.node_end.y - self.node_start.y) **2)
         sin = (self.node_end.y - self.node_start.y) / L
         cos = (self.node_end.x - self.node_start.x) / L
-        node_a = list(Node.objects.all()).index(self.node_start)
-        node_b = list(Node.objects.all()).index(self.node_end)
+        node_a = nodes.index(self.node_start)
+        node_b = nodes.index(self.node_end)
 
         xy = []
         length = np.linspace(0, L, self.num_of_calc + 1)

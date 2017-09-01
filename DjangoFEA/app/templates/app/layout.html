@@ -8,10 +8,11 @@
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" />
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-route.js"></script>
 </head>
 
 <body ng-app="djangofea">
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div ng-controller="AuthenticationController" class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -23,17 +24,20 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="{% url 'about' %}">About</a></li>
-                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about/">About</a></li>
+                    <li><a href="/contact/">Contact</a></li>
                 </ul>
-                {% include 'app/loginpartial.html' %}
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a ng-href="#!/login-form">Log in</a></li>
+                    <li><a href="" ng-click="logout()">Log off</a></li>
+                </ul>
             </div>
         </div>
     </div>
 
     <div class="container body-content">
-        {% block content %}{% endblock %}
+        <ng-view></ng-view>
         <hr/>
         <footer>
             <p>&copy; {{ year }} - DjangoFEA</p>
@@ -44,7 +48,11 @@
     <script src="{% static 'app/scripts/respond.js' %}"></script>
     <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
     <script src="{% static 'app/scripts/angular.js' %}"></script>
+    <script src="{% static 'app/scripts/app.config.js' %}"></script>
     <script src="{% static 'app/directives/node.directive.js' %}"></script>
+    <script src="{% static 'app/directives/section.directive.js' %}"></script>
+    <script src="{% static 'app/directives/element.directive.js' %}"></script>
+    <script src="{% static 'app/directives/concentratedLoad.directive.js' %}"></script>
     <script src="{% static 'js/Chart.min.js' %}"></script>
     {% block scripts %}{% endblock %}
 </body>

@@ -17,8 +17,8 @@
 <div class="jumbotron">
     <canvas id="model_chart"></canvas>
     <div class="btn-group btn-group-justified" role="group" aria-label="...">
-        <a class="save btn btn-default btn-sm" href="{% url 'home' %}">Model</a>
-        <a class="save btn btn-default btn-sm" href="{% url 'deflection' %}">Deflection</a>
+        <a class="save btn btn-default btn-sm" href="/">Model</a>
+        <a class="save btn btn-default btn-sm" href="/deflection/">Deflection</a>
         <a class="save btn btn-default btn-sm" href="{% url 'bending' %}">Bending</a>
         <a class="save btn btn-default btn-sm" href="{% url 'shear' %}">Shear</a>
         <a class="save btn btn-default btn-sm" href="{% url 'axial' %}">Axial</a>
@@ -28,9 +28,10 @@
 <div class="row">
     <div class="col-md-3">
         <h2>Nodes</h2>
-        <div class="post" id="nodes" ng-controller="Controller">
+        <div class="post" id="nodes" ng-controller="NodesController">
             <table>
                 <tr>
+                    <th>ID</th>
                     <th>X|m</th>
                     <th>Y|m</th>
                 </tr>
@@ -38,6 +39,7 @@
                 <tr node ng-repeat="node in nodes"></tr>
                 <tr>
                     <form method="POST" class="form" id="empty-node-form">{% endverbatim %}{% csrf_token %}{% verbatim %}
+                        <td></td>
                         <td><input type="number" ng-model="x" /></td>
                         <td><input type="number" ng-model="y" /></td>
                         <td><input type="checkbox" ng-model="x_boundary_condition" /></td>
@@ -47,37 +49,12 @@
                     </form>
                 </tr>
                 {% endverbatim %}
-
-                {% for node in nodes %}
-                {% if nodeForm.instance == node  %}
-                <tr>
-                    <form method="POST" action="{% url 'item_edit' item_type='node' pk=node.pk %}" class="form" id="node-form">{% csrf_token %}
-                        <td>{{ nodeForm.x }}</td>
-                        <td>{{ nodeForm.y }}</td>
-                        <td>{{ nodeForm.x_boundary_condition }}</td>
-                        <td>{{ nodeForm.y_boundary_condition }}</td>
-                        <td>{{ nodeForm.fi_boundary_condition }}</td>
-                        <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="edit_node"> Commit </button></td>
-                    </form>
-                </tr>
-                {% endif %}
-                {% endfor %}
-                <!--<tr>
-                    <form method="POST" action="{% url 'item_new' item_type='node' %}" class="form" id="empty-node-form">{% csrf_token %}
-                        <td>{{ emptyNodeForm.x }}</td>
-                        <td>{{ emptyNodeForm.y }}</td>
-                        <td>{{ emptyNodeForm.x_boundary_condition }}</td>
-                        <td>{{ emptyNodeForm.y_boundary_condition }}</td>
-                        <td>{{ emptyNodeForm.fi_boundary_condition }}</td>
-                        <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="new_node"> + </button></td>
-                    </form>
-                </tr>-->
             </table>
         </div>
     </div>
     <div class="col-md-4">
         <h2>Sections</h2>
-        <div class="post" id="sections">
+        <div class="post" id="sections" ng-controller="SectionsController">
             <table>
                 <tr>
                     <th>ID</th>
@@ -86,46 +63,24 @@
                     <th>J|cm<sup>4</sup></th>
                     <th>&#947;|kN/m<sup>3</sup></th>
                 </tr>
-                {% for section in sections %}
-                <tr>
-                    <td>{{ section.pk }}</td>
-                    <td>{{ section.E }}</td>
-                    <td>{{ section.A }}</td>
-                    <td>{{ section.J }}</td>
-                    <td>{{ section.ro }}</td>
-                    <td class="display-flex">
-                        <a class="save btn btn-default btn-sm" href="{% url 'item_edit' item_type='section' pk=section.pk %}">Edit</a>
-                        <a class="save btn btn-default btn-sm" href="{% url 'item_delete' item_type='section' pk=section.pk %}">-</a>
-                    </td>
-                </tr>        
-                {% if sectionForm.instance == section %}
-                <tr>
-                    <form method="POST" action="{% url 'item_edit' item_type='section' pk=section.pk %}" class="form" id="section-form">{% csrf_token %}
+                {% verbatim %}
+                <tr section ng-repeat="section in sections"></tr>
+                 <tr>
+                    <form method="POST" class="form" id="empty-section-form">{% endverbatim %}{% csrf_token %}{% verbatim %}
                         <td></td>
-                        <td>{{ sectionForm.E }}</td>
-                        <td>{{ sectionForm.A }}</td>
-                        <td>{{ sectionForm.J }}</td>
-                        <td>{{ sectionForm.ro }}</td>
-                        <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="section"> Commit </button></td>
+                        <td><input type="number" ng-model="E" /></td>
+                        <td><input type="number" ng-model="A" /></td>
+                        <td><input type="number" ng-model="J" /></td>
+                        <td><input type="number" ng-model="ro" /></td>
+                        <td><button ng-click="add_section(sections)" class="save btn btn-default btn-sm btn-block" name="new_section"> + </button></td>
                     </form>
                 </tr>
-                {% endif %}
-                {% endfor %}
-                <tr>
-                    <form method="POST" action="{% url 'item_new' item_type='section' %}" class="form" id="empty-section-form">{% csrf_token %}
-                        <td></td>
-                        <td>{{ emptySectionForm.E }}</td>
-                        <td>{{ emptySectionForm.A }}</td>
-                        <td>{{ emptySectionForm.J }}</td>
-                        <td>{{ emptySectionForm.ro }}</td>
-                        <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="section"> + </button></td>
-                    </form>
-                </tr>
+                {% endverbatim %}
             </table>
         </div>
 
         <h2>Elements</h2>
-        <div class="post" id="elements">
+        <div class="post" id="elements" ng-controller="ElementsController">
             <table>
                 <tr>
                     <th>ID</th>
@@ -133,50 +88,26 @@
                     <th>Start</th>
                     <th>End</th>
                 </tr>
-                {% for element in elements %}
+                {% verbatim %}
+                <tr element ng-repeat="element in elements"></tr>
                 <tr>
-                    <td>{{ element.pk }}</td>
-                    <td>{{ element.section }}</td>
-                    <td>{{ element.node_start }}</td>
-                    <td>{{ element.node_end }}</td>
-                    <td>{{ element.hinge_start|yesno:"X,O" }}</td>
-                    <td>{{ element.hinge_end|yesno:"X,O" }}</td>
-                    <td class="display-flex">
-                        <a class="save btn btn-default btn-sm" href="{% url 'item_edit' item_type='element' pk=element.pk %}">Edit</a>
-                        <a class="save btn btn-default btn-sm" href="{% url 'item_delete' item_type='element' pk=element.pk %}">-</a>
-                    </td>
-                </tr>        
-                {% if elementForm.instance == element %}
-                <tr>
-                    <form method="POST" action="{% url 'item_edit' item_type='element' pk=element.pk %}" class="form" id="element-form">{% csrf_token %}
+                    <form method="POST" class="form" id="empty-element-form">{% endverbatim %}{% csrf_token %}{% verbatim %}
                         <td></td>
-                        <td>{{ elementForm.section }}</td>
-                        <td>{{ elementForm.node_start }}</td>
-                        <td>{{ elementForm.node_end }}</td>
-                        <td>{{ elementForm.hinge_start }}</td>
-                        <td>{{ elementForm.hinge_end }}</td>
-                        <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="element"> Commit </button></td>
+                        <td><select ng-model="section" ng-options="section for section in sections" /></td>
+                        <td><select ng-model="node_start" ng-options="node for node in nodes" /></td>
+                        <td><select ng-model="node_end" ng-options="node for node in nodes" /></td>
+                        <td><input type="checkbox" ng-model="hinge_start" /></td>
+                        <td><input type="checkbox" ng-model="hinge_end" /></td>
+                        <td><button ng-click="add_element(elements)" class="save btn btn-default btn-sm btn-block" name="new_element"> + </button></td>
                     </form>
                 </tr>
-                {% endif %}
-                {% endfor %}
-                <tr>
-                    <form method="POST" action="{% url 'item_new' item_type='element' %}" class="form" id="empty-element-form">{% csrf_token %}
-                        <td></td>
-                        <td>{{ emptyElementForm.section }}</td>
-                        <td>{{ emptyElementForm.node_start }}</td>
-                        <td>{{ emptyElementForm.node_end }}</td>
-                        <td>{{ emptyElementForm.hinge_start }}</td>
-                        <td>{{ emptyElementForm.hinge_end }}</td>
-                        <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="element"> + </button></td>
-                    </form>
-                </tr>
+                {% endverbatim %}
             </table>
         </div>
     </div>
     <div class="col-md-5">
         <h2>Concentrated Loads</h2>
-        <div class="post" id="concentrated-loads">
+        <div class="post" id="concentrated-loads" ng-controller="ConcentratedLoadsController">
             <table>
                 <tr>
                     <th>Element</th>
@@ -185,41 +116,19 @@
                     <th>M|kNm</th>
                     <th>deg|<sup>o</sup></th>
                 </tr>
-                {% for concentrated_load in concentrated_loads %}
+                {% verbatim %}
+                <tr concentrated ng-repeat="concentratedLoad in concentratedLoads"></tr>
                 <tr>
-                    <td>{{ concentrated_load.associated_element }}</td>
-                    <td>{{ concentrated_load.f1 }}</td>
-                    <td>{{ concentrated_load.coord1 }}</td>
-                    <td>{{ concentrated_load.m }}</td>
-                    <td>{{ concentrated_load.deg }}</td>
-                    <td class="display-flex">
-                        <a class="save btn btn-default btn-sm" href="{% url 'item_edit' item_type='concentrated_load' pk=concentrated_load.pk %}">Edit</a>
-                        <a class="save btn btn-default btn-sm" href="{% url 'item_delete' item_type='concentrated_load' pk=concentrated_load.pk %}">-</a>
-                    </td>
-                </tr>   
-                {% if loadForm.instance == concentrated_load %}
-                <tr>
-                    <form method="POST" action="{% url 'item_edit' item_type='concentrated_load' pk=concentrated_load.pk %}" class="form" id="concentrated-load-form">{% csrf_token %}
-                        <td>{{ concentratedLoadForm.associated_element }}</td>
-                        <td>{{ concentratedLoadForm.f1 }}</td>
-                        <td>{{ concentratedLoadForm.coord1 }}</td>
-                        <td>{{ concentratedLoadForm.m }}</td>
-                        <td>{{ concentratedLoadForm.deg }}</td>
-                        <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="load"> Commit </button></td>
+                    <form method="POST" class="form" id="empty-concentrated-load-form">{% endverbatim %}{% csrf_token %}{% verbatim %}
+                        <td><select ng-model="associated_element" ng-options="element for element in elements" /></td>
+                        <td><input type="number" ng-model="f1" /></td>
+                        <td><input type="number" ng-model="coord1" /></td>
+                        <td><input type="number" ng-model="m" /></td>
+                        <td><input type="number" ng-model="deg" /></td>
+                        <td><button ng-click="add_concentrated_load(concentratedLoads)" class="save btn btn-default btn-sm btn-block" name="new_concentrated_load"> + </button></td>
                     </form>
                 </tr>
-                {% endif %}
-                {% endfor %}
-                <tr>
-                    <form method="POST" action="{% url 'item_new' item_type='concentrated_load' %}" class="form" id="empty-concentrated-load-form">{% csrf_token %}
-                        <td>{{ emptyConcentratedLoadForm.associated_element }}</td>
-                        <td>{{ emptyConcentratedLoadForm.f1 }}</td>
-                        <td>{{ emptyConcentratedLoadForm.coord1 }}</td>
-                        <td>{{ emptyConcentratedLoadForm.m }}</td>
-                        <td>{{ emptyConcentratedLoadForm.deg }}</td>
-                        <td><button type="submit" class="save btn btn-default btn-sm btn-block" name="load"> + </button></td>
-                    </form>
-                </tr>
+                {% endverbatim %}
             </table>
         </div>
 

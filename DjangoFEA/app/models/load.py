@@ -24,7 +24,7 @@ class ConcentratedLoad(Load):
             and set appropriate values of angles and loads,
         4. fill po matrix with values.
         '''
-    def append_to_force_matrix(self, po):
+    def append_to_force_matrix(self, po, nodes):
         x1 = self.associated_element.node_start.x
         y1 = self.associated_element.node_start.y
         x2 = self.associated_element.node_end.x
@@ -32,8 +32,8 @@ class ConcentratedLoad(Load):
         L = math.sqrt ((x2 - x1) **2 + (y2 - y1) **2)
         angle = self.deg*math.pi/180
             
-        node_a = list(Node.objects.all()).index(self.associated_element.node_start)
-        node_b = list(Node.objects.all()).index(self.associated_element.node_end)
+        node_a = nodes.index(self.associated_element.node_start)
+        node_b = nodes.index(self.associated_element.node_end)
         bc0 = self.associated_element.hinge_start
         bc1 = self.associated_element.hinge_end
                   

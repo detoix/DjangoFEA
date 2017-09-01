@@ -15,6 +15,18 @@
                     $http.put(url, $scope.node);
                 };
 
+                $scope.delete = function () {
+                    $http.delete(url).then(
+                        function () {
+                            var nodes = $scope.nodes;
+                            nodes.splice(
+                                nodes.indexOf($scope.node),
+                                1
+                            );
+                        }
+                    );
+                };
+
                 $scope.modelOptions = {
                     debounce: 500
                 }

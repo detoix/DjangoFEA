@@ -1,0 +1,20 @@
+﻿<tr ng-model-options="modelOptions">
+    <td ng-hide="edit">{{ section.id }}</td>
+    <td ng-hide="edit">{{ section.E }}</td>
+    <td ng-hide="edit">{{ section.A }}</td>
+    <td ng-hide="edit">{{ section.J }}</td>
+    <td ng-hide="edit">{{ section.ro }}</td>
+    <td ng-hide="edit" class="display-flex">
+        <a class="save btn btn-default btn-sm" ng-click="edit=true">Edit</a>
+        <a class="save btn btn-default btn-sm" ng-click="delete()">-</a>
+    </td>
+
+    <form method="POST" class="form" id="empty-section-form">{% endverbatim %}{% csrf_token %}{% verbatim %}
+        <td ng-show="edit"></td>
+        <td ng-show="edit"><input type="number" ng-model="section.E" ng-change="update()" /></td>
+        <td ng-show="edit"><input type="number" ng-model="section.A" ng-change="update()" /></td>
+        <td ng-show="edit"><input type="number" ng-model="section.J" ng-change="update()" /></td>
+        <td ng-show="edit"><input type="number" ng-model="section.ro" ng-change="update()" /></td>
+        <td ng-show="edit"><button type="submit" class="save btn btn-default btn-sm btn-block" ng-click="edit=false"> Save </button></td>
+    </form>
+</tr>
