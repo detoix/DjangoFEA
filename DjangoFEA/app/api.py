@@ -6,6 +6,7 @@ from rest_framework import serializers
 
 from app.serializers import NodeSerializer, SectionSerializer, ElementSerializer, ConcentratedLoadSerializer
 from app.models import Node, Section, Element, ConcentratedLoad, Solver
+from app.models import VoidResultsProvider, DeflectionResultsProvider, BendingResultsProvider, ShearResultsProvider, AxialResultsProvider
 
 import json
 
@@ -44,7 +45,7 @@ class ConcentratedLoadViewSet(ModelViewSet):
 class ResultsViewSet(APIView):
     permission_classes = (IsAuthenticated,)
 
-    def get_results(self, request, results_type):
+    def get_results(self, request, results_provider):
         nodes = Node.objects.filter(author=self.request.user).order_by('created_date')
         elements = Element.objects.filter(author=self.request.user).order_by('created_date')
         
@@ -63,29 +64,26 @@ class ResultsViewSet(APIView):
                         'lineTension': 0,
                         'fill': False } for obj in elements]
 
-        if results_type == None:
-            data = []
-        else:
-            data = Solver(self.request.user).solve(results_type)
+        data = Solver(self.request.user).solve(results_provider)
         chart_data = { 'datasets': model_nodes + model_bars + data }
         return Response(json.dumps(chart_data))
 
 class ModelViewSet(ResultsViewSet):
     def get(self, request):
-        return super().get_results(request, None)
+        return super().get_results(request, VoidResultsProvider())
 
 class DeflectionViewSet(ResultsViewSet):
     def get(self, request):
-        return super().get_results(request, 0)
+        return super().get_results(request, DeflectionResultsProvider())
 
 class BendingViewSet(ResultsViewSet):
     def get(self, request):
-        return super().get_results(request, 1)
+        return super().get_results(request, BendingResultsProvider())
 
 class ShearViewSet(ResultsViewSet):
     def get(self, request):
-        return super().get_results(request, 2)
+        return super().get_results(request, ShearResultsProvider())
 
 class AxialViewSet(ResultsViewSet):
     def get(self, request):
-        return super().get_results(request, 3)
+        return super().get_results(request, AxialResultsProvider())

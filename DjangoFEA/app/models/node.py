@@ -27,7 +27,3 @@ class Node(DataItem):
             K0[tmp_id * 3 + 2, tmp_id * 3 + 2]=1
             P0[tmp_id * 3 + 2]=0
         return K0,P0
-
-    def __str__(self):
-        return str(self.x) + ', ' + str(self.y)
-

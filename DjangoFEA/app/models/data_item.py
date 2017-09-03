@@ -8,9 +8,6 @@ class DataItem(models.Model):
     def publish(self):
         self.save()
 
-    def __str__(self):
-        return self.author
-
     class Meta:
         abstract = True
 

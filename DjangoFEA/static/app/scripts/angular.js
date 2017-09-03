@@ -2,17 +2,23 @@
     'use strict';
     angular.module('djangofea', ['ngRoute'])
         .controller('Controller', ['$scope', '$http', '$location', Controller])
+        .controller('AuthenticationController', ['$scope', '$http', '$location', AuthenticationController])
 
-    function Controller($scope, $http, $location) {
+    function AuthenticationController($scope, $http, $location) {
         $scope.login = function () {
-            $http.post('/auth_api/login/',
-                { username: 'kdeptula', password: '1qctmoq9' });
+            $http.post('/auth_api/login/', $scope.user)
+                .then(
+                function () { $location.url('/'); }, function () { $location.url('/'); });
         };
 
         $scope.logout = function () {
-            $http.get('/auth_api/logout/');
+            $http.get('/auth_api/logout/')
+                .then(
+                function () { $location.url('/'); });
         };
+    }
 
+    function Controller($scope, $http, $location) {
         $scope.nodes = []
         $scope.nodesIds = []
         $http.get('/nodes/').then(function (response) {

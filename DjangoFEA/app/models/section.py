@@ -6,6 +6,3 @@ class Section(DataItem):
     A = models.FloatField()
     J = models.FloatField()
     ro = models.FloatField()
-
-    def __str__(self):
-        return str(self.pk)

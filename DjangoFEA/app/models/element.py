@@ -480,6 +480,3 @@ class Element(DataItem):
         V2 = 1/L
 
         return E*A*((u1*cos+v1*sin)*V1+(u2*cos+v2*sin)*V2)
-
-    def __str__(self):
-        return str(self.pk)

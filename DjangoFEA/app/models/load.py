@@ -12,9 +12,6 @@ class Load(DataItem):
     deg = models.FloatField()
 
 class ConcentratedLoad(Load):
-    def __str__(self):
-        return "conc"
-
     #static boundary conditions
     '''the function acts as follows:
         1. read nodes, bar data etc.,
@@ -370,15 +367,7 @@ class ConcentratedLoad(Load):
         return (-dy_cl + dy_hin)
 
 class DistributedLoad(Load):
-    def __str__(self):
-        return "distr"
-
-    def abc(self):
-        return 3
+    pass
 
 class DistributedXLoad(Load):
-    def __str__(self):
-        return "distr-X"
-
-    def abc(self):
-        return 3
+    pass

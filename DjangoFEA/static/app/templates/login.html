@@ -2,29 +2,28 @@
 <div class="row">
     <div class="col-md-8">
         <section id="loginForm">
-            <form action="." method="post" class="form-horizontal">
+            <form ng-submit="login()" class="form-horizontal">
                 <input type='hidden' name='csrfmiddlewaretoken' value='GN5QR37fvUjssHkWGoS4emvnTw2ylCBBW9KEzMiI4xMy8EZhM6ebdcrchIvIsYdi' />
                 <h4>Use a local account to log in.</h4>
                 <hr />
                 <div class="form-group">
                     <label for="id_username" class="col-md-2 control-label">User name</label>
                     <div class="col-md-10">
-                        <input type="text" name="username" class="form-control" placeholder="User name" maxlength="254" required id="id_username" />
+                        <input type="text" ng-model="user.username" name="username" class="form-control" placeholder="User name" maxlength="254" required id="id_username" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="id_password" class="col-md-2 control-label">Password</label>
                     <div class="col-md-10">
-                        <input type="password" name="password" class="form-control" placeholder="Password" required id="id_password" />
+                        <input type="password" ng-model="user.password" name="password" class="form-control" placeholder="Password" required id="id_password" />
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <input type="hidden" name="next" value="/" />
-                        <input type="submit" value="Log in" class="btn btn-default" />
+                         <button class="btn btn-default" ng-click="login()">Log in</button>
                     </div>
                 </div>
-                
             </form>
         </section>
     </div>

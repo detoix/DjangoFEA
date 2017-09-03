@@ -19,9 +19,9 @@
                 templateUrl: '/static/app/templates/contact.html',
                 controller: 'Controller',
             })
-            .when('/login/', {
+            .when('/login-form', {
                 templateUrl: '/static/app/templates/login.html',
-                controller: 'Controller',
+                controller: 'AuthenticationController',
             })
             .otherwise('/');
     }

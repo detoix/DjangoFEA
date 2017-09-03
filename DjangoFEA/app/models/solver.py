@@ -9,15 +9,7 @@ class Solver():
         self.elements = Element.objects.filter(author=user).order_by('created_date')
         self.loads = ConcentratedLoad.objects.filter(author=user).order_by('created_date')
 
-    def run(self):
-        return self.loads[0].abc()
-
-    #calculate displacements
-    '''The function acts as follows:
-        1. 
-        '''
-
-    def solve(self, expected_result):
+    def solve(self, results_provider):
         dof = 3
         Neq = dof * len(self.nodes)
 
@@ -41,13 +33,6 @@ class Solver():
         result = []
         for element in self.elements:
             associated_loads = self.loads.filter(associated_element=element)
-            if expected_result == 0:
-                xy = element.calculate_deflection(displacements, associated_loads, self.nodes)
-            elif expected_result == 1:
-                xy = element.calculate_bending(displacements, associated_loads, self.nodes)
-            elif expected_result == 2:
-                xy = element.calculate_shear(displacements, associated_loads, self.nodes)
-            elif expected_result == 3:
-                xy = element.calculate_axial(displacements, associated_loads, self.nodes)
+            xy = results_provider.execute(element, displacements, associated_loads, self.nodes)
             result.append({ 'data': xy, 'label': 'Results ' + str(element), 'fill': False })
         return result
