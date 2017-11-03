@@ -20,24 +20,18 @@
 
     function Controller($scope, $http, $location) {
         $scope.nodes = []
-        $scope.nodesIds = []
         $http.get('/nodes/').then(function (response) {
             $scope.nodes = response.data;
-            $scope.nodesIds = response.data.map(function (v) { return v.id; });
         })
 
         $scope.sections = []
-        $scope.sectionsIds = []
         $http.get('/sections/').then(function (response) {
             $scope.sections = response.data;
-            $scope.sectionsIds = response.data.map(function (v) { return v.id; });
         })
 
         $scope.elements = []
-        $scope.elementsIds = []
         $http.get('/elements/').then(function (response) {
             $scope.elements = response.data;
-            $scope.elementsIds = response.data.map(function (v) { return v.id; });
         })
 
         $scope.concentratedLoads = []

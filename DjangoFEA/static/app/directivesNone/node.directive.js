@@ -2,25 +2,25 @@
     'use strict';
 
     angular.module('djangofea')
-        .directive('concentrated', ConcentratedLoadDirective);
+        .directive('node', NodeDirective);
 
-    function ConcentratedLoadDirective() {
+    function NodeDirective() {
         return {
-            templateUrl: '/static/app/directives/concentratedLoad.html',
+            templateUrl: '/static/app/directives/node.html',
             restrict: 'A',
             replace: true,
             controller: ['$scope', '$http', function ($scope, $http) {
-                var url = '/concentrated-loads/' + $scope.concentratedLoad.id + '/';
+                var url = '/nodes/' + $scope.node.id + '/';
                 $scope.update = function () {
-                    $http.put(url, $scope.concentratedLoad);
+                    $http.put(url, $scope.node);
                 };
 
                 $scope.delete = function () {
                     $http.delete(url).then(
                         function () {
-                            var concentratedLoads = $scope.concentratedLoads;
-                            concentratedLoads.splice(
-                                concentratedLoads.indexOf($scope.concentratedLoad),
+                            var nodes = $scope.nodes;
+                            nodes.splice(
+                                nodes.indexOf($scope.node),
                                 1
                             );
                         }
@@ -29,7 +29,7 @@
 
                 $scope.modelOptions = {
                     debounce: 500
-                };
+                }
             }]
         };
     }

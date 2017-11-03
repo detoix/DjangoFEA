@@ -9,118 +9,158 @@ class Element(DataItem):
     node_end = models.ForeignKey(Node, on_delete=models.CASCADE, related_name="node_end")
     hinge_start = models.BooleanField()
     hinge_end = models.BooleanField()
-
+   
     @property
     def num_of_calc(self):
         return 10
 
-    class Meta:
-        unique_together = ('node_start', 'node_end')
+    @property
+    def E(self):
+        return self.section.E*100000000
 
-    #assembling stiffness matrix
-    '''The function acts as follows:
-        1. create empty matrixes,
-        2. read positions of first and second node of each bar element,
-        3. read characteristics,
-        4. calculate transformation matrix R,
-        5. compute partial matrixes B, C, D, for each type of bar (fixed-fixed, pinned-fixed, fixed-pinned, pinned-pinned),
-        6. matrix transformation,
-        7. assemble Bg, Cg, Dg (global coordinates) into global stiffness matrix Ko
-        '''
+    @property
+    def A(self):
+        return self.section.A/10000
 
-    def assemble_stiffness_matrix(self, K0, nodes):
+    @property
+    def J(self):
+        return self.section.J/100000000
+
+    @property
+    def L(self):  
+        return math.sqrt ((self.node_end.x - self.node_start.x) **2 + (self.node_end.y - self.node_start.y) **2)
+
+    @property
+    def R(self):
         x1 = self.node_start.x
         y1 = self.node_start.y
         x2 = self.node_end.x
         y2 = self.node_end.y      
-        L = math.sqrt ((x2 - x1) **2 + (y2 - y1) **2)
-            
-        E = self.section.E*100000000
-        A = self.section.A/10000
-        J = self.section.J/100000000
-        L = math.sqrt ((x2 - x1) **2 + (y2 - y1) **2)
-        R = np.matrix([[x2 - x1, y1 - y2, 0],
-                            [y2 - y1, x2 - x1, 0],
-                            [0, 0, L]]) / L
-        #frame element
+        return np.matrix([[x2 - x1, y1 - y2, 0],
+                          [y2 - y1, x2 - x1, 0],
+                          [0, 0, self.L]]) / self.L
+
+    class Meta:
+        unique_together = ('node_start', 'node_end')
+
+    def append_to_global_stiffness_matrix(self, K0, nodes):
+        return self.set_hinges_state() \
+                   .calculate_B_partial_matrix() \
+                   .calculate_C_partial_matrix() \
+                   .calculate_D_partial_matrix() \
+                   .transform_partial_matrices() \
+                   .find_indices_in_global_stiffness_matrix(nodes) \
+                   .append_to_and_return(K0)
+
+    def set_hinges_state(self):
         if self.hinge_start == False and self.hinge_end == False:
-            B = np.matrix([[A / J, 0, 0],
-                                [0, 12 / L ** 2, - 6 / L],
-                                [0, - 6 / L, 4]])
-            B = E * J * B / L
-            C = np.matrix([[- A / J, 0, 0],
-                                [0, - 12 / L ** 2, 6 / L],
-                                [0, - 6 / L, 2]])
-            C = E * J * C / L
-            D = np.matrix([[A / J, 0, 0],
-                                [0, 12 / L ** 2, 6 / L],
-                                [0, 6 / L, 4]])
-            D = E * J * D / L
-            
-        #lelf hinge
+            self.calculate_B_partial_matrix = self.calculate_B_partial_matrix_frame_element
+            self.calculate_C_partial_matrix = self.calculate_C_partial_matrix_frame_element
+            self.calculate_D_partial_matrix = self.calculate_D_partial_matrix_frame_element
         elif self.hinge_start == True and self.hinge_end == False:
-            B = np.matrix([[A / J, 0, 0],
-                                [0, 3 / L ** 2, - 3 / L],
-                                [0, - 3 / L, 3]])
-            B = E * J * B / L
-            C = np.matrix([[- A / J, 0, 0],
-                                [0, - 3 / L ** 2, 3 / L],
-                                [0, 0, 0]])
-            C = E * J * C / L
-            D = np.matrix([[A / J, 0, 0],
-                                [0, 3 / L ** 2, 0],
-                                [0, 0, 0]])
-            D = E * J * D / L
-
-        #right hinge    
+            self.calculate_B_partial_matrix = self.calculate_B_partial_matrix_left_hinge
+            self.calculate_C_partial_matrix = self.calculate_C_partial_matrix_left_hinge
+            self.calculate_D_partial_matrix = self.calculate_D_partial_matrix_left_hinge
         elif self.hinge_start == False and self.hinge_end == True:
-            B = np.matrix([[A / J, 0, 0],
-                                [0, 3 / L ** 2, 0],
-                                [0, 0, 0]])
-            B = E * J * B / L
-            C = np.matrix([[- A / J, 0, 0],
-                                [0, - 3 / L ** 2, 0],
-                                [0, - 3 / L, 0]])
-            C = E * J * C / L
-            D = np.matrix([[A / J, 0, 0],
-                                [0, 3 / L ** 2, 3 / L],
-                                [0, 3 / L, 3]])
-            D = E * J * D / L
-                                
-        #truss element
+            self.calculate_B_partial_matrix = self.calculate_B_partial_matrix_right_hinge
+            self.calculate_C_partial_matrix = self.calculate_C_partial_matrix_right_hinge
+            self.calculate_D_partial_matrix = self.calculate_D_partial_matrix_right_hinge
         else:
-            B = np.matrix([[A * E / L, 0, 0],
-                                [0, 0, 0],
-                                [0, 0, 0]])
-            C = np.matrix([[- A * E / L, 0, 0],
-                                [0, 0, 0],
-                                [0, 0, 0]])
-            D = np.matrix([[A * E / L, 0, 0],
-                                [0, 0, 0],
-                                [0, 0, 0]])
-        #trasformation
-        Bg = R*B*R.T
-        Cg = R*C*R.T
-        Dg = R*D*R.T
-                        
-        #assembling
-        node_a = nodes.index(self.node_start)
-        node_b = nodes.index(self.node_end)
+            self.calculate_B_partial_matrix = self.calculate_B_partial_matrix_truss_element
+            self.calculate_C_partial_matrix = self.calculate_C_partial_matrix_truss_element
+            self.calculate_D_partial_matrix = self.calculate_D_partial_matrix_truss_element
+        return self
 
-        ne = node_a * 3
-        ke = node_b * 3
-        K0[ne:ne+Dg.shape[0], ne:ne+Dg.shape[1]] += Dg
-        K0[ke:ke+Bg.shape[0], ke:ke+Bg.shape[1]] += Bg
-        K0[ne:ne+Cg.shape[0], ke:ke+Cg.shape[1]] += Cg
-        K0[ke:ke+Cg.T.shape[0], ne:ne+Cg.T.shape[1]] += Cg.T
+    def calculate_B_partial_matrix_frame_element(self):
+        self.B = np.matrix([[self.A / self.J, 0, 0],
+                            [0, 12 / self.L ** 2, - 6 / self.L],
+                            [0, - 6 / self.L, 4]]) * self.E * self.J / self.L
+        return self
+
+    def calculate_C_partial_matrix_frame_element(self):
+        self.C = np.matrix([[- self.A / self.J, 0, 0],
+                            [0, - 12 / self.L ** 2, 6 / self.L],
+                            [0, - 6 / self.L, 2]]) * self.E * self.J / self.L
+        return self
+
+    def calculate_D_partial_matrix_frame_element(self):
+        self.D = np.matrix([[self.A / self.J, 0, 0],
+                            [0, 12 / self.L ** 2, 6 / self.L],
+                            [0, 6 / self.L, 4]]) * self.E * self.J / self.L
+        return self
+
+    def calculate_B_partial_matrix_left_hinge(self):
+        self.B = np.matrix([[self.A / self.J, 0, 0],
+                            [0, 3 / self.L ** 2, - 3 / self.L],
+                            [0, - 3 / self.L, 3]]) * self.E * self.J / self.L
+        return self
+
+    def calculate_C_partial_matrix_left_hinge(self):
+        self.C = np.matrix([[- self.A / self.J, 0, 0],
+                            [0, - 3 / self.L ** 2, 3 / self.L],
+                            [0, 0, 0]]) * self.E * self.J / self.L
+        return self
+
+    def calculate_D_partial_matrix_left_hinge(self):
+        self.D = np.matrix([[self.A / self.J, 0, 0],
+                            [0, 3 / self.L ** 2, 0],
+                            [0, 0, 0]]) * self.E * self.J / self.L
+        return self
+
+    def calculate_B_partial_matrix_right_hinge(self):
+        self.B = np.matrix([[self.A / self.J, 0, 0],
+                            [0, 3 / self.L ** 2, 0],
+                            [0, 0, 0]]) * self.E * self.J / self.L
+        return self
+
+    def calculate_C_partial_matrix_right_hinge(self):
+        self.C = np.matrix([[- self.A / self.J, 0, 0],
+                            [0, - 3 / self.L ** 2, 0],
+                            [0, - 3 / self.L, 0]]) * self.E * self.J / self.L
+        return self
+
+    def calculate_D_partial_matrix_right_hinge(self):
+        self.D = np.matrix([[self.A / self.J, 0, 0],
+                            [0, 3 / self.L ** 2, 3 / self.L],
+                            [0, 3 / self.L, 3]]) * self.E * self.J / self.L
+        return self
+
+    def calculate_B_partial_matrix_truss_element(self):
+        self.B = np.matrix([[self.A * self.E / self.L, 0, 0],
+                            [0, 0, 0],
+                            [0, 0, 0]])
+        return self
+
+    def calculate_C_partial_matrix_truss_element(self):
+        self.C = np.matrix([[- self.A * self.E / self.L, 0, 0],
+                            [0, 0, 0],
+                            [0, 0, 0]])
+        return self
+
+    def calculate_D_partial_matrix_truss_element(self):
+        self.D = np.matrix([[self.A * self.E / self.L, 0, 0],
+                            [0, 0, 0],
+                            [0, 0, 0]])
+        return self
+
+    def transform_partial_matrices(self):
+        self.Bg = self.R*self.B*self.R.T
+        self.Cg = self.R*self.C*self.R.T
+        self.Dg = self.R*self.D*self.R.T
+        return self
+
+    def find_indices_in_global_stiffness_matrix(self, nodes):
+        self.ne = nodes.index(self.node_start) * 3
+        self.ke = nodes.index(self.node_end) * 3
+        return self
+
+    def append_to_and_return(self, K0):
+        K0[self.ne:self.ne + self.Dg.shape[0], self.ne:self.ne + self.Dg.shape[1]] += self.Dg
+        K0[self.ke:self.ke + self.Bg.shape[0], self.ke:self.ke + self.Bg.shape[1]] += self.Bg
+        K0[self.ne:self.ne + self.Cg.shape[0], self.ke:self.ke + self.Cg.shape[1]] += self.Cg
+        K0[self.ke:self.ke + self.Cg.T.shape[0], self.ne:self.ne + self.Cg.T.shape[1]] += self.Cg.T
         return K0
         
-    #apply dead loads
-    '''the function acts as follows:
-        1. Read nodes and variables for each bar,
-        2. update global force matrix po
-        '''
-
     def append_dead_load_to_force_matrix(self, P0, nodes):
         x1 = self.node_start.x
         y1 = self.node_start.y

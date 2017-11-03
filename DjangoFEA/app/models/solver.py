@@ -17,7 +17,7 @@ class Solver():
         P0 = np.zeros(Neq)
 
         for element in self.elements:
-            K0 = element.assemble_stiffness_matrix(K0, self.nodes)
+            K0 = element.append_to_global_stiffness_matrix(K0, self.nodes)
             P0 = element.append_dead_load_to_force_matrix(P0, self.nodes)
 
         for load in self.loads:
@@ -34,5 +34,5 @@ class Solver():
         for element in self.elements:
             associated_loads = self.loads.filter(associated_element=element)
             xy = results_provider.execute(element, displacements, associated_loads, self.nodes)
-            result.append({ 'data': xy, 'label': 'Results ' + str(element), 'fill': False })
+            result.append({ 'data': xy, 'label': 'Results ' + str(element.id), 'fill': False })
         return result

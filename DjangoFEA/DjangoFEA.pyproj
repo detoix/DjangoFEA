@@ -33,7 +33,6 @@
     <Compile Include="app\api.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="app\forms.py" />
     <Compile Include="app\models\data_item.py">
       <SubType>Code</SubType>
     </Compile>
@@ -59,7 +58,10 @@
     <Compile Include="app\serializers.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="app\tests.py" />
+    <Compile Include="app\tests\tests_element.py" />
+    <Compile Include="app\tests\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\views.py" />
     <Compile Include="app\__init__.py" />
     <Compile Include="app\migrations\__init__.py" />
@@ -71,7 +73,6 @@
     <Compile Include="auth_api\migrations\__init__.py" />
     <Compile Include="auth_api\models.py" />
     <Compile Include="auth_api\serializers.py" />
-    <Compile Include="auth_api\tests.py" />
     <Compile Include="auth_api\urls.py" />
     <Compile Include="auth_api\views.py" />
     <Compile Include="auth_api\__init__.py" />
@@ -85,6 +86,7 @@
     <Folder Include="app\" />
     <Folder Include="app\migrations\" />
     <Folder Include="app\models\" />
+    <Folder Include="app\tests\" />
     <Folder Include="app\static\app\directives\" />
     <Folder Include="app\static\" />
     <Folder Include="app\static\app\" />
@@ -92,8 +94,6 @@
     <Folder Include="app\static\app\fonts\" />
     <Folder Include="app\static\app\templates\" />
     <Folder Include="app\static\app\scripts\" />
-    <Folder Include="app\templates\" />
-    <Folder Include="app\templates\app\" />
     <Folder Include="auth_api\" />
     <Folder Include="auth_api\migrations\" />
     <Folder Include="auth_api\templates\" />
@@ -129,12 +129,12 @@
     <Content Include="app\static\app\directives\node.html" />
     <Content Include="app\static\app\directives\section.directive.js" />
     <Content Include="app\static\app\directives\section.html" />
-    <Content Include="app\static\app\scripts\ajax.js" />
     <Content Include="app\static\app\scripts\angular.js" />
     <Content Include="app\static\app\scripts\app.config.js" />
     <Content Include="app\static\app\templates\contact.html" />
     <Content Include="app\static\app\templates\index.html" />
     <Content Include="app\static\app\templates\login.html" />
+    <Content Include="templates\layout.html" />
     <Content Include="auth_api\templates\index.html" />
     <Content Include="DjangoFEA\__pycache__\settings.cpython-36.pyc" />
     <Content Include="DjangoFEA\__pycache__\urls.cpython-36.pyc" />
@@ -164,11 +164,6 @@
     <Content Include="app\static\app\scripts\respond.js" />
     <Content Include="app\static\app\scripts\respond.min.js" />
     <Content Include="app\static\app\scripts\_references.js" />
-    <Content Include="app\templates\app\about.html" />
-    <Content Include="app\templates\app\contact.html" />
-    <Content Include="app\templates\app\index.html" />
-    <Content Include="app\templates\app\layout.html" />
-    <Content Include="app\templates\app\login.html" />
     <Content Include="static\admin\css\base.css" />
     <Content Include="static\admin\css\changelists.css" />
     <Content Include="static\admin\css\dashboard.css" />

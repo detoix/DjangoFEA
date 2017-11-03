@@ -12,9 +12,9 @@
 
     <form method="POST" class="form" id="empty-element-form">{% endverbatim %}{% csrf_token %}{% verbatim %}
         <td ng-show="edit"></td>
-        <td ng-show="edit"><select ng-model="element.section" ng-options="section.id as section.id for section in sections" ng-change="update()" /></td>
-        <td ng-show="edit"><select ng-model="element.node_start" ng-options="node.id as node.id for node in nodes" ng-change="update()" /></td>
-        <td ng-show="edit"><select ng-model="element.node_end" ng-options="node.id as node.id for node in nodes" ng-change="update()" /></td>
+        <td ng-show="edit"><select ng-model="element.section" ng-options="section for section in sectionsIds" ng-change="update()" /></td>
+        <td ng-show="edit"><select ng-model="element.node_start" ng-options="node for node in nodesIds" ng-change="update()" /></td>
+        <td ng-show="edit"><select ng-model="element.node_end" ng-options="node for node in nodesIds" ng-change="update()" /></td>
         <td ng-show="edit"><input type="checkbox" ng-model="element.hinge_start" ng-change="update()" /></td>
         <td ng-show="edit"><input type="checkbox" ng-model="element.hinge_end" ng-change="update()" /></td>
         <td ng-show="edit"><button type="submit" class="save btn btn-default btn-sm btn-block" ng-click="edit=false"> Save </button></td>

@@ -1,0 +1,22 @@
+﻿<tr ng-model-options="modelOptions">
+    <td ng-hide="edit">{{ node.id }}</td>
+    <td ng-hide="edit">{{ node.x }}</td>
+    <td ng-hide="edit">{{ node.y }}</td>
+    <td ng-hide="edit">{{ node.x_boundary_condition }}</td>
+    <td ng-hide="edit">{{ node.y_boundary_condition }}</td>
+    <td ng-hide="edit">{{ node.fi_boundary_condition }}</td>
+    <td ng-hide="edit" class="display-flex">
+        <a class="save btn btn-default btn-sm" ng-click="edit=true">Edit</a>
+        <a class="save btn btn-default btn-sm" ng-click="delete()">-</a>
+    </td>
+
+    <form method="POST" class="form" id="empty-node-form">{% endverbatim %}{% csrf_token %}{% verbatim %}
+        <td ng-show="edit"></td>
+        <td ng-show="edit"><input type="number" ng-model="node.x" ng-change="update()" /></td>
+        <td ng-show="edit"><input type="number" ng-model="node.y" ng-change="update()" /></td>
+        <td ng-show="edit"><input type="checkbox" ng-model="node.x_boundary_condition" ng-change="update()" /></td>
+        <td ng-show="edit"><input type="checkbox" ng-model="node.y_boundary_condition" ng-change="update()" /></td>
+        <td ng-show="edit"><input type="checkbox" ng-model="node.fi_boundary_condition" ng-change="update()" /></td>
+        <td ng-show="edit"><button type="submit" class="save btn btn-default btn-sm btn-block" ng-click="edit=false"> Save </button></td>
+    </form>
+</tr>

@@ -10,7 +10,7 @@
     </td>
 
     <form method="POST" class="form" id="empty-concentrated-load-form">{% endverbatim %}{% csrf_token %}{% verbatim %}
-        <td ng-show="edit"><select ng-model="concentratedLoad.associated_element" ng-options="element for element in elementsIds" ng-change="update()" /></td>
+        <td ng-show="edit"><select ng-model="concentratedLoad.associated_element" ng-options="element.id as element.id for element in elements" ng-change="update()" /></td>
         <td ng-show="edit"><input type="number" ng-model="concentratedLoad.f1" ng-change="update()" /></td>
         <td ng-show="edit"><input type="number" ng-model="concentratedLoad.coord1" ng-change="update()" /></td>
         <td ng-show="edit"><input type="number" ng-model="concentratedLoad.m" ng-change="update()" /></td>

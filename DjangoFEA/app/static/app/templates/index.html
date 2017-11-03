@@ -72,9 +72,9 @@
                 <tr>
                     <form method="POST" class="form" id="empty-element-form">
                         <td></td>
-                        <td><select ng-model="section" ng-options="section for section in sectionsIds" /></td>
-                        <td><select ng-model="node_start" ng-options="node for node in nodesIds" /></td>
-                        <td><select ng-model="node_end" ng-options="node for node in nodesIds" /></td>
+                        <td><select ng-model="section" ng-options="section.id as section.id for section in sections" /></td>
+                        <td><select ng-model="node_start" ng-options="node.id as node.id for node in nodes" /></td>
+                        <td><select ng-model="node_end" ng-options="node.id as node.id for node in nodes" /></td>
                         <td><input type="checkbox" ng-model="hinge_start" /></td>
                         <td><input type="checkbox" ng-model="hinge_end" /></td>
                         <td><button ng-click="add_element(elements)" class="save btn btn-default btn-sm btn-block" name="new_element"> + </button></td>
@@ -97,7 +97,7 @@
                 <tr concentrated ng-repeat="concentratedLoad in concentratedLoads"></tr>
                 <tr>
                     <form method="POST" class="form" id="empty-concentrated-load-form">
-                        <td><select ng-model="associated_element" ng-options="element for element in elementsIds" /></td>
+                        <td><select ng-model="associated_element" ng-options="element.id for element in elements" /></td>
                         <td><input type="number" ng-model="f1" /></td>
                         <td><input type="number" ng-model="coord1" /></td>
                         <td><input type="number" ng-model="m" /></td>
