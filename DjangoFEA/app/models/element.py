@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.signals import post_init
 import numpy as np
 import math as math
 from app.models import DataItem, Node, Section
@@ -16,19 +17,19 @@ class Element(DataItem):
 
     @property
     def E(self):
-        return self.section.E*100000000
+        return self.section.E * 100000000
 
     @property
     def A(self):
-        return self.section.A/10000
+        return self.section.A / 10000
 
     @property
     def J(self):
-        return self.section.J/100000000
+        return self.section.J / 100000000
 
     @property
     def L(self):  
-        return math.sqrt ((self.node_end.x - self.node_start.x) **2 + (self.node_end.y - self.node_start.y) **2)
+        return math.hypot(self.node_end.x - self.node_start.x, self.node_end.y - self.node_start.y)
 
     @property
     def R(self):
@@ -44,8 +45,7 @@ class Element(DataItem):
         unique_together = ('node_start', 'node_end')
 
     def append_to_global_stiffness_matrix(self, K0, nodes):
-        return self.set_hinges_state() \
-                   .calculate_B_partial_matrix() \
+        return self.calculate_B_partial_matrix() \
                    .calculate_C_partial_matrix() \
                    .calculate_D_partial_matrix() \
                    .transform_partial_matrices() \
@@ -143,6 +143,18 @@ class Element(DataItem):
                             [0, 0, 0]])
         return self
 
+    def set_empty_matrices(self):
+        self.B = np.matrix([[0, 0, 0],
+                            [0, 0, 0],
+                            [0, 0, 0]])
+        self.C = np.matrix([[0, 0, 0],
+                            [0, 0, 0],
+                            [0, 0, 0]])
+        self.D = np.matrix([[0, 0, 0],
+                            [0, 0, 0],
+                            [0, 0, 0]])
+        return self
+
     def transform_partial_matrices(self):
         self.Bg = self.R*self.B*self.R.T
         self.Cg = self.R*self.C*self.R.T
@@ -232,7 +244,7 @@ class Element(DataItem):
             u = self.node_start.x + ((i + dx * scale) * cos - dy * scale * sin)
             v = self.node_start.y + ((i + dx * scale) * sin + dy * scale * cos)
 
-            xy.append({ 'x': u, 'y': v })
+            xy.append({ 'x': u, 'y': v, 'tag': '(u: ' + format(dx, '.3f') + ', v: ' + format(dy, '.3f') + ')'})
 
         return xy
 
@@ -520,3 +532,10 @@ class Element(DataItem):
         V2 = 1/L
 
         return E*A*((u1*cos+v1*sin)*V1+(u2*cos+v2*sin)*V2)
+
+def post_constructor(**kwargs):
+    instance = kwargs.get('instance') \
+        .set_hinges_state() \
+        .set_empty_matrices()
+   
+post_init.connect(post_constructor, Element)

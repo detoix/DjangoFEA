@@ -12,6 +12,28 @@ class Load(DataItem):
     deg = models.FloatField()
 
 class ConcentratedLoad(Load):
+    @property
+    def x(self):
+        x1 = self.associated_element.node_start.x
+        y1 = self.associated_element.node_start.y
+        x2 = self.associated_element.node_end.x
+        y2 = self.associated_element.node_end.y
+        L = self.associated_element.L
+        sin = (y2-y1) / L
+        cos = (x2-x1) / L
+        return x1 + (x2 - x1) * self.coord1
+
+    @property
+    def y(self):
+        x1 = self.associated_element.node_start.x
+        y1 = self.associated_element.node_start.y
+        x2 = self.associated_element.node_end.x
+        y2 = self.associated_element.node_end.y
+        L = self.associated_element.L
+        sin = (y2-y1) / L
+        cos = (x2-x1) / L
+        return y1 + (y2 - y1) * self.coord1
+
     #static boundary conditions
     '''the function acts as follows:
         1. read nodes, bar data etc.,

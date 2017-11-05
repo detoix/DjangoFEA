@@ -50,15 +50,26 @@ class ResultsViewSet(APIView):
     def get_results(self, results_provider):
         nodes = Node.objects.filter(author=self.request.user).order_by('created_date')
         elements = Element.objects.filter(author=self.request.user).order_by('created_date')
+        loads = ConcentratedLoad.objects.filter(author=self.request.user).order_by('created_date')
         
-        model_nodes = [{ 'data': 
-                            [{ 'x': obj.x, 'y': obj.y} for obj in nodes], 
-                         'label': "Nodes", 
+        #model_nodes = [{ 'data': 
+        #                    [{ 'x': obj.x, 'y': obj.y} for obj in nodes], 
+        #                 'label': "Nodes", 
+        #                 'lineTension': 0,
+        #                 'fill': False,
+        #                 'pointStyle': 'triangle',
+        #                 'pointRadius': 10,
+        #                 'showLine': False }]
+
+        model_loads = [{ 'data': 
+                            [{ 'x': obj.x, 'y': obj.y} for obj in loads], 
+                         'label': "Loads", 
                          'lineTension': 0,
                          'fill': False,
                          'pointStyle': 'triangle',
                          'pointRadius': 10,
                          'showLine': False }]
+
         model_bars = [{ 'data': 
                             [{ 'x': obj.node_start.x, 'y': obj.node_start.y},
                              { 'x': obj.node_end.x, 'y': obj.node_end.y}], 
@@ -67,7 +78,7 @@ class ResultsViewSet(APIView):
                         'fill': False } for obj in elements]
 
         data = Solver(self.request.user).solve(results_provider)
-        chart_data = { 'datasets': model_nodes + model_bars + data }
+        chart_data = { 'datasets': model_loads + model_bars + data }
         return Response(json.dumps(chart_data))
 
 class ModelViewSet(ResultsViewSet):

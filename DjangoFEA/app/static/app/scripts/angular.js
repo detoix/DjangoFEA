@@ -67,6 +67,23 @@
                     {
                         type: 'scatter',
                         data: JSON.parse(response.data),
+                        options: {
+                            tooltips: {
+                                mode: 'nearest',
+                                callbacks: {
+                                    label: function (tooltipItem, data) {
+                                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                                        if (!value.tag) {
+                                            return '(' + value.x + ', ' + value.y + ')';
+                                        }
+                                        else
+                                        {
+                                            return value.tag;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     })
             }) 
         }
