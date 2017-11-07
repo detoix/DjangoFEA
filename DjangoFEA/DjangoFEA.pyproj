@@ -131,9 +131,11 @@
     <Content Include="app\static\app\directives\section.html" />
     <Content Include="app\static\app\scripts\angular.js" />
     <Content Include="app\static\app\scripts\app.config.js" />
+    <Content Include="app\static\app\scripts\chart.min.mine.js" />
     <Content Include="app\static\app\templates\contact.html" />
     <Content Include="app\static\app\templates\index.html" />
     <Content Include="app\static\app\templates\login.html" />
+    <Content Include="static\js\Chart.min.mine.js" />
     <Content Include="templates\layout.html" />
     <Content Include="auth_api\templates\index.html" />
     <Content Include="DjangoFEA\__pycache__\settings.cpython-36.pyc" />

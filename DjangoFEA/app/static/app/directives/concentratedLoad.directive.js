@@ -12,7 +12,11 @@
             controller: ['$scope', '$http', function ($scope, $http) {
                 var url = '/concentrated-loads/' + $scope.concentratedLoad.id + '/';
                 $scope.update = function () {
-                    $http.put(url, $scope.concentratedLoad);
+                    $http.put(url, $scope.concentratedLoad).then(
+                        function () {
+                            $scope.onload();
+                        }
+                    );
                 };
 
                 $scope.delete = function () {

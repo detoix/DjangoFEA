@@ -34,6 +34,10 @@ class ConcentratedLoad(Load):
         cos = (x2-x1) / L
         return y1 + (y2 - y1) * self.coord1
 
+    @property
+    def angle(self):
+        return np.arcsin((self.associated_element.node_end.y - self.associated_element.node_start.y) / self.associated_element.L) + self.deg * math.pi / 180
+
     #static boundary conditions
     '''the function acts as follows:
         1. read nodes, bar data etc.,

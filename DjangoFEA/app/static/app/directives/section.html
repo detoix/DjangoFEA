@@ -11,10 +11,10 @@
 
     <form method="POST" class="form" id="empty-section-form">{% endverbatim %}{% csrf_token %}{% verbatim %}
         <td ng-show="edit"></td>
-        <td ng-show="edit"><input type="number" ng-model="section.E" ng-change="update()" /></td>
-        <td ng-show="edit"><input type="number" ng-model="section.A" ng-change="update()" /></td>
-        <td ng-show="edit"><input type="number" ng-model="section.J" ng-change="update()" /></td>
-        <td ng-show="edit"><input type="number" ng-model="section.ro" ng-change="update()" /></td>
+        <td ng-show="edit"><input type="number" id="form" ng-model="section.E" ng-change="update()" /></td>
+        <td ng-show="edit"><input type="number" id="form" ng-model="section.A" ng-change="update()" /></td>
+        <td ng-show="edit"><input type="number" id="form" ng-model="section.J" ng-change="update()" /></td>
+        <td ng-show="edit"><input type="number" id="form" ng-model="section.ro" ng-change="update()" /></td>
         <td ng-show="edit"><button type="submit" class="save btn btn-default btn-sm btn-block" ng-click="edit=false"> Save </button></td>
     </form>
 </tr>

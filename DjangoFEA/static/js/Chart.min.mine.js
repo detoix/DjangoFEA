@@ -27,7 +27,7 @@
                     case "crossRot": e.beginPath(), l = Math.cos(Math.PI / 4) * i, u = Math.sin(Math.PI / 4) * i, e.moveTo(n - l, o - u), e.lineTo(n + l, o + u), e.moveTo(n - l, o + u), e.lineTo(n + l, o - u), e.closePath(); break;
                     case "star": e.beginPath(), e.moveTo(n, o + i), e.lineTo(n, o - i), e.moveTo(n - i, o), e.lineTo(n + i, o), l = Math.cos(Math.PI / 4) * i, u = Math.sin(Math.PI / 4) * i, e.moveTo(n - l, o - u), e.lineTo(n + l, o + u), e.moveTo(n - l, o + u), e.lineTo(n + l, o - u), e.closePath(); break;
                     case "line": e.beginPath(), e.moveTo(n - i, o), e.lineTo(n + i, o), e.closePath(); break;
-                    case "custom": e.beginPath(), e.moveTo(n - i, o), e.lineTo(n + i, o), e.closePath(); break;
+                    case "custom": e.beginPath(), s = 3 * i / Math.sqrt(3), d = s * Math.sqrt(3) / 2, e.moveTo(n - s / 2, o + d / 3), e.lineTo(n + s / 2, o + d / 3), e.lineTo(n, o - 2 * d / 3), e.closePath(), e.fill(); break;
                     case "dash": e.beginPath(), e.moveTo(n, o), e.lineTo(n + i, o), e.closePath()
                 }e.stroke()
             }

@@ -51,22 +51,13 @@ class ResultsViewSet(APIView):
         nodes = Node.objects.filter(author=self.request.user).order_by('created_date')
         elements = Element.objects.filter(author=self.request.user).order_by('created_date')
         loads = ConcentratedLoad.objects.filter(author=self.request.user).order_by('created_date')
-        
-        #model_nodes = [{ 'data': 
-        #                    [{ 'x': obj.x, 'y': obj.y} for obj in nodes], 
-        #                 'label': "Nodes", 
-        #                 'lineTension': 0,
-        #                 'fill': False,
-        #                 'pointStyle': 'triangle',
-        #                 'pointRadius': 10,
-        #                 'showLine': False }]
 
         model_loads = [{ 'data': 
                             [{ 'x': obj.x, 'y': obj.y} for obj in loads], 
                          'label': "Loads", 
                          'lineTension': 0,
                          'fill': False,
-                         'pointStyle': 'triangle',
+                         'pointStyle': ['custom:{0}:{1}'.format(obj.f1, obj.angle) for obj in loads],
                          'pointRadius': 10,
                          'showLine': False }]
 

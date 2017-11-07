@@ -12,7 +12,11 @@
             controller: ['$scope', '$http', function ($scope, $http) {
                 var url = '/elements/' + $scope.element.id + '/';
                 $scope.update = function () {
-                    $http.put(url, $scope.element);
+                    $http.put(url, $scope.element).then(
+                        function () {
+                            $scope.onload();
+                        }
+                    );
                 };
 
                 $scope.delete = function () {

@@ -16,8 +16,20 @@ textarea {
     max-width: 280px;
 }
 
-input[type="number"] {
-    width: 100%
+input[type="number"]#form {
+    width: 100%;
+}
+
+input[type="number"]#slider-left {
+    width: 80px;
+    margin: 20px 10px 0 0;
+    font-size: 14px;
+}
+
+input[type="number"]#slider-right {
+    width: 80px;
+    margin: 20px 0 0 10px;
+    font-size: 14px;
 }
 
 /* styles for validation helpers */

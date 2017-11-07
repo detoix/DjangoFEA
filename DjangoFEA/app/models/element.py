@@ -240,12 +240,13 @@ class Element(DataItem):
             dx = x_dead + x + x_load
             dy = y_dead + y + y_load
 
-            scale = 5
-            u = self.node_start.x + ((i + dx * scale) * cos - dy * scale * sin)
-            v = self.node_start.y + ((i + dx * scale) * sin + dy * scale * cos)
-
-            xy.append({ 'x': u, 'y': v, 'tag': '(u: ' + format(dx, '.3f') + ', v: ' + format(dy, '.3f') + ')'})
-
+            xy.append({'tag': '(u: ' + format(dx, '.3f') + ', v: ' + format(dy, '.3f') + ')',
+                       'x0': self.node_start.x + i * cos,
+                       'y0': self.node_start.y + i * sin,
+                       'dx': dx,
+                       'dy': dy,
+                       'sin': sin,
+                       'cos': cos})
         return xy
 
     def calculate_deflection_of_dead_loads_in_point(self, i, L, sin, cos):
@@ -331,12 +332,13 @@ class Element(DataItem):
 
             dy = y_dead + y + y_load
 
-            scale = 100000
-            u = self.node_start.x + (i*cos+dy*scale*sin)  
-            v = self.node_start.y + (i*sin-dy*scale*cos)
-
-            xy.append({ 'x': u, 'y': v })
-
+            xy.append({'tag': format(dy, '.3f') + ' kNm',
+                       'x0': self.node_start.x + i * cos,
+                       'y0': self.node_start.y + i * sin,
+                       'dx': 0,
+                       'dy': dy,
+                       'sin': sin,
+                       'cos': cos})
         return xy
 
     def calculate_bending_of_dead_loads_in_point(self, i, L, sin, cos):
@@ -414,12 +416,13 @@ class Element(DataItem):
 
             dy = y_dead + y + y_load
 
-            scale = 100000
-            u = self.node_start.x + (i*cos+dy*scale*sin)  
-            v = self.node_start.y + (i*sin-dy*scale*cos)
-
-            xy.append({ 'x': u, 'y': v })
-
+            xy.append({'tag': format(dy, '.3f') + ' kN',
+                       'x0': self.node_start.x + i * cos,
+                       'y0': self.node_start.y + i * sin,
+                       'dx': 0,
+                       'dy': dy,
+                       'sin': sin,
+                       'cos': cos})
         return xy
 
     def calculate_shear_of_dead_loads_in_point(self, i, L, sin, cos):
@@ -477,7 +480,7 @@ class Element(DataItem):
 
         return dy
 
-    def calculate_axial(self, displacements, associated_loads):
+    def calculate_axial(self, displacements, associated_loads, nodes):
         L = math.sqrt ((self.node_end.x - self.node_start.x) **2 + (self.node_end.y - self.node_start.y) **2)
         sin = (self.node_end.y - self.node_start.y) / L
         cos = (self.node_end.x - self.node_start.x) / L
@@ -497,12 +500,13 @@ class Element(DataItem):
 
             dy = y_dead + y + y_load
 
-            scale = 100000
-            u = self.node_start.x + (i*cos+dy*scale*sin)  
-            v = self.node_start.y + (i*sin-dy*scale*cos)
-
-            xy.append({ 'x': u, 'y': v })
-
+            xy.append({'tag': format(dy, '.3f') + ' kN',
+                       'x0': self.node_start.x + i * cos,
+                       'y0': self.node_start.y + i * sin,
+                       'dx': 0,
+                       'dy': dy,
+                       'sin': sin,
+                       'cos': cos})
         return xy
 
     def calculate_axial_of_dead_loads_in_point(self, i, L, sin, cos):

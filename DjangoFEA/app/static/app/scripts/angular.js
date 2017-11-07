@@ -1,6 +1,6 @@
 (function () {
     'use strict';
-    angular.module('djangofea', ['ngRoute'])
+    angular.module('djangofea', ['ngRoute', 'rzModule'])
         .controller('Controller', ['$scope', '$http', '$location', Controller])
         .controller('AuthenticationController', ['$scope', '$http', '$location', AuthenticationController])
 
@@ -59,32 +59,64 @@
             $scope.load('axial')
         }
 
-        $scope.load = function (expected) {
-            var modelChart = document.getElementById('model_chart');
+        $scope.slider = {
+            value: 5,
+            options: {
+                floor: 0,
+                ceil: 10,
+                step: 0.1,
+                precision: 1,
+                hidePointerLabels: true,
+                hideLimitLabels: true,
+            }
+        };
 
+        $scope.$on("slideEnded", function () {
+            $scope.load($scope.current)
+        });
+
+        $scope.load = function (expected) {
+            $scope.current = expected;
+            var scale = $scope.slider.value;
+            var modelChart = document.getElementById('model_chart');
             $http.get('/' + expected + '/').then(function (response) {
-                var chart = new Chart(modelChart,
-                    {
-                        type: 'scatter',
-                        data: JSON.parse(response.data),
-                        options: {
-                            tooltips: {
-                                mode: 'nearest',
-                                callbacks: {
-                                    label: function (tooltipItem, data) {
-                                        var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-                                        if (!value.tag) {
-                                            return '(' + value.x + ', ' + value.y + ')';
-                                        }
-                                        else
-                                        {
-                                            return value.tag;
-                                        }
+                var data = JSON.parse(response.data);
+                data.datasets.forEach(function (dataset) {
+                    dataset.data.forEach(function (point) {
+                        if (point.tag) {
+                            point.x = point.x0 + scale * (point.dx * point.cos - point.dy * point.sin);
+                            point.y = point.y0 + scale * (point.dx * point.sin + point.dy * point.cos);
+                        }
+                    });
+                });
+
+                if (!!$scope.chart) {
+                    $scope.chart.destroy();
+                }
+
+                $scope.chart = new Chart(modelChart, {
+                    type: 'scatter',
+                    data: data,
+                    options: {
+                        tooltips: {
+                            mode: 'nearest',
+                            callbacks: {
+                                label: function (tooltipItem, data) {
+                                    var value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                                    if (!value.tag) {
+                                        return '(' + value.x + ', ' + value.y + ')';
+                                    }
+                                    else {
+                                        return value.tag;
                                     }
                                 }
                             }
+                        },
+                        animation: {
+                            duration: 0
                         }
-                    })
+                    }
+                })
             }) 
         }
 
@@ -152,26 +184,26 @@
                 }
             );
         };
-    }
 
-    $scope.add_concentrated_load = function (concentratedLoads) {
+        $scope.add_concentrated_load = function (concentratedLoads) {
 
-        var concentratedLoad = {
-            associated_element: $scope.associated_element,
-            f1: $scope.f1,
-            coord1: $scope.coord1,
-            author: 1,
-            m: $scope.m,
-            deg: $scope.deg,
+            var concentratedLoad = {
+                associated_element: $scope.associated_element,
+                f1: $scope.f1,
+                coord1: $scope.coord1,
+                author: 1,
+                m: $scope.m,
+                deg: $scope.deg,
+            };
+
+            $http.post('/concentrated-loads/', concentratedLoad).then(
+                function (response) {
+                    concentratedLoads.push(response.data);
+                },
+                function () {
+                    alert('Something went wrong');
+                }
+            );
         };
-
-        $http.post('/concentrated-loads/', concentratedLoad).then(
-            function (response) {
-                concentratedLoads.push(response.data);
-            },
-            function () {
-                alert('Something went wrong');
-            }
-        );
-    };
+    }
 }());

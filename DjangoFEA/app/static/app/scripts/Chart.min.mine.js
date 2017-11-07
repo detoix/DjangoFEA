@@ -17,7 +17,18 @@
     "use strict"; e.exports = function (t) {
         var e = t.canvasHelpers = {}; e.drawPoint = function (e, a, i, n, o) {
             var r, s, l, u, d, c; if ("object" == typeof a && (r = a.toString(), "[object HTMLImageElement]" === r || "[object HTMLCanvasElement]" === r)) return void e.drawImage(a, n - a.width / 2, o - a.height / 2); if (!(isNaN(i) || i <= 0)) {
-                switch (a) {
+                var scale = document.getElementsByClassName("rz-pointer")[0].getAttribute("aria-valuenow");
+                var dt = a.split(":");
+                var type = dt[0];
+                var size = dt[1] * 10 * parseFloat(scale);
+                var angle = parseFloat(dt[2]);
+                var sin = Math.sin(angle);
+                var cos = Math.cos(angle);
+
+                var x = n + scale * (size * sin);
+                var y = o + scale * (size * cos);
+
+                switch (type) {
                     default: e.beginPath(), e.arc(n, o, i, 0, 2 * Math.PI), e.closePath(), e.fill(); break;
                     case "triangle": e.beginPath(), s = 3 * i / Math.sqrt(3), d = s * Math.sqrt(3) / 2, e.moveTo(n - s / 2, o + d / 3), e.lineTo(n + s / 2, o + d / 3), e.lineTo(n, o - 2 * d / 3), e.closePath(), e.fill(); break;
                     case "rect": c = 1 / Math.SQRT2 * i, e.beginPath(), e.fillRect(n - c, o - c, 2 * c, 2 * c), e.strokeRect(n - c, o - c, 2 * c, 2 * c); break;
@@ -27,7 +38,7 @@
                     case "crossRot": e.beginPath(), l = Math.cos(Math.PI / 4) * i, u = Math.sin(Math.PI / 4) * i, e.moveTo(n - l, o - u), e.lineTo(n + l, o + u), e.moveTo(n - l, o + u), e.lineTo(n + l, o - u), e.closePath(); break;
                     case "star": e.beginPath(), e.moveTo(n, o + i), e.lineTo(n, o - i), e.moveTo(n - i, o), e.lineTo(n + i, o), l = Math.cos(Math.PI / 4) * i, u = Math.sin(Math.PI / 4) * i, e.moveTo(n - l, o - u), e.lineTo(n + l, o + u), e.moveTo(n - l, o + u), e.lineTo(n + l, o - u), e.closePath(); break;
                     case "line": e.beginPath(), e.moveTo(n - i, o), e.lineTo(n + i, o), e.closePath(); break;
-                    case "custom": e.beginPath(), e.moveTo(n - i, o), e.lineTo(n + i, o), e.closePath(); break;
+                    case "custom": e.beginPath(), e.moveTo(x, y), e.lineTo(n, o), e.closePath(); break;
                     case "dash": e.beginPath(), e.moveTo(n, o), e.lineTo(n + i, o), e.closePath()
                 }e.stroke()
             }

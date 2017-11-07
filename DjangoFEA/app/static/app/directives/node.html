@@ -12,8 +12,8 @@
 
     <form method="POST" class="form" id="empty-node-form">{% endverbatim %}{% csrf_token %}{% verbatim %}
         <td ng-show="edit"></td>
-        <td ng-show="edit"><input type="number" ng-model="node.x" ng-change="update()" /></td>
-        <td ng-show="edit"><input type="number" ng-model="node.y" ng-change="update()" /></td>
+        <td ng-show="edit"><input type="number" id="form" ng-model="node.x" ng-change="update()" /></td>
+        <td ng-show="edit"><input type="number" id="form" ng-model="node.y" ng-change="update()" /></td>
         <td ng-show="edit"><input type="checkbox" ng-model="node.x_boundary_condition" ng-change="update()" /></td>
         <td ng-show="edit"><input type="checkbox" ng-model="node.y_boundary_condition" ng-change="update()" /></td>
         <td ng-show="edit"><input type="checkbox" ng-model="node.fi_boundary_condition" ng-change="update()" /></td>

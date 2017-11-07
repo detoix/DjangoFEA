@@ -7,6 +7,11 @@
         <a class="save btn btn-default btn-sm" ng-click="shear()">Shear</a>
         <a class="save btn btn-default btn-sm" ng-click="axial()">Axial</a>
     </div>
+    <div class="display-flex">
+        <input type="number" id="slider-left" ng-model="slider.options.floor" class="ng-pristine ng-valid ng-empty ng-touched col-sm-1">
+        <rzslider id="slider" rz-slider-model="slider.value" rz-slider-options="slider.options" class="col-sm-3"></rzslider>
+        <input type="number" id="slider-right" ng-model="slider.options.ceil" class="ng-pristine ng-valid ng-empty ng-touched col-sm-1">
+    </div>
 </div>
 
 <div class="row">
@@ -23,8 +28,8 @@
                 <tr>
                     <form method="POST" class="form" id="empty-node-form">
                         <td></td>
-                        <td><input type="number" ng-model="x" /></td>
-                        <td><input type="number" ng-model="y" /></td>
+                        <td><input type="number" id="form" ng-model="x" /></td>
+                        <td><input type="number" id="form" ng-model="y" /></td>
                         <td><input type="checkbox" ng-model="x_boundary_condition" /></td>
                         <td><input type="checkbox" ng-model="y_boundary_condition" /></td>
                         <td><input type="checkbox" ng-model="fi_boundary_condition" /></td>
@@ -49,10 +54,10 @@
                  <tr>
                     <form method="POST" class="form" id="empty-section-form">
                         <td></td>
-                        <td><input type="number" ng-model="E" /></td>
-                        <td><input type="number" ng-model="A" /></td>
-                        <td><input type="number" ng-model="J" /></td>
-                        <td><input type="number" ng-model="ro" /></td>
+                        <td><input type="number" id="form" ng-model="E" /></td>
+                        <td><input type="number" id="form" ng-model="A" /></td>
+                        <td><input type="number" id="form" ng-model="J" /></td>
+                        <td><input type="number" id="form" ng-model="ro" /></td>
                         <td><button ng-click="add_section(sections)" class="save btn btn-default btn-sm btn-block" name="new_section"> + </button></td>
                     </form>
                 </tr>
@@ -98,40 +103,13 @@
                 <tr>
                     <form method="POST" class="form" id="empty-concentrated-load-form">
                         <td><select ng-model="associated_element" ng-options="element.id for element in elements" /></td>
-                        <td><input type="number" ng-model="f1" /></td>
-                        <td><input type="number" ng-model="coord1" /></td>
-                        <td><input type="number" ng-model="m" /></td>
-                        <td><input type="number" ng-model="deg" /></td>
+                        <td><input type="number" id="form" ng-model="f1" /></td>
+                        <td><input type="number" id="form" ng-model="coord1" /></td>
+                        <td><input type="number" id="form" ng-model="m" /></td>
+                        <td><input type="number" id="form" ng-model="deg" /></td>
                         <td><button ng-click="add_concentrated_load(concentratedLoads)" class="save btn btn-default btn-sm btn-block" name="new_concentrated_load"> + </button></td>
                     </form>
                 </tr>
-            </table>
-        </div>
-
-        <h2>Distributed Loads</h2>
-        <div class="post" id="distributed-loads">
-            <table>
-                <tr>
-                    <th>Element</th>
-                    <th>F1|kN/m</th>
-                    <th>F2|kN/m</th>
-                    <th>x1/L|-</th>
-                    <th>x2/L|-</th>
-                    <th>deg|<sup>o</sup></th>
-                </tr>
-
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td class="display-flex">
-                        <a class="save btn btn-default btn-sm">Edit</a>
-                        <a class="save btn btn-default btn-sm">-</a>
-                    </td>
-                </tr>          
             </table>
         </div>
     </div>
