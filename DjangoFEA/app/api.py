@@ -20,6 +20,10 @@ class NodeViewSet(ModelViewSet):
     def get_queryset(self):
         return self.queryset.filter(author=self.request.user)
 
+class NodeAllViewSet(ModelViewSet):
+    queryset = Node.objects.all()
+    serializer_class = NodeSerializer
+
 class SectionViewSet(ModelViewSet):
     queryset = Section.objects.all()
     serializer_class = SectionSerializer

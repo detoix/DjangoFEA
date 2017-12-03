@@ -114,7 +114,23 @@
                         },
                         animation: {
                             duration: 0
-                        }
+                        },
+                        //scales: {
+                        //    xAxes: [{
+                        //        ticks: {
+                        //            stepSize: 1
+                        //            //min: 0,
+                        //            //max: 3,
+                        //        }
+                        //    }],
+                        //    yAxes: [{
+                        //        ticks: {
+                        //            stepSize: 1
+                        //            //min: 0,
+                        //            //max: 1.5,
+                        //        }
+                        //    }]
+                        //}
                     }
                 })
             }) 
