@@ -1,0 +1,9 @@
+_apply_defusing
+PY3
+_generate_etree_functions
+DefusedXmlException
+DTDForbidden
+EntitiesForbidden
+ExternalReferenceForbidden
+sys
+NotSupportedError

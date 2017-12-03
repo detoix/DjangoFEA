@@ -1,0 +1,15 @@
+_TreeBuilder
+fromstring
+_iterparse
+_parse
+iterparse
+XMLParse
+absolute_import
+__all__
+XMLTreeBuilder
+parse
+DefusedXMLParser
+_generate_etree_functions
+tostring
+__origin__
+XML

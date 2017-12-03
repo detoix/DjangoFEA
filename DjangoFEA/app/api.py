@@ -5,7 +5,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import serializers
 
 from collections import OrderedDict
-
+from rest_framework.parsers import JSONParser
+from rest_framework.renderers import JSONRenderer
+from rest_framework_xml.parsers import XMLParser
+from rest_framework_xml.renderers import XMLRenderer
 from app.serializers import NodeSerializer, SectionSerializer, ElementSerializer, ConcentratedLoadSerializer
 from app.models import Node, Section, Element, ConcentratedLoad, Solver
 from app.models import VoidResultsProvider, DeflectionResultsProvider, BendingResultsProvider, ShearResultsProvider, AxialResultsProvider
@@ -23,6 +26,8 @@ class NodeViewSet(ModelViewSet):
 class NodeAllViewSet(ModelViewSet):
     queryset = Node.objects.all()
     serializer_class = NodeSerializer
+    parser_classes = (XMLParser, JSONParser)
+    renderer_classes = (XMLRenderer, JSONRenderer)
 
 class SectionViewSet(ModelViewSet):
     queryset = Section.objects.all()

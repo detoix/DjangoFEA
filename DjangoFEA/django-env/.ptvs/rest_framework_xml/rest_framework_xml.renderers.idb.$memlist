@@ -1,0 +1,7 @@
+BaseRenderer
+six
+unicode_literals
+SimplerXMLGenerator
+smart_text
+XMLRenderer
+StringIO

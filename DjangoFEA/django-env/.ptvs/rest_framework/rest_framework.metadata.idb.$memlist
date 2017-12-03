@@ -9,3 +9,4 @@ SimpleMetadata
 Http404
 OrderedDict
 PermissionDenied
+PrimaryKeyRelatedField
