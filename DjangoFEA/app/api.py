@@ -45,6 +45,12 @@ class ElementViewSet(ModelViewSet):
     def get_queryset(self):
         return self.queryset.filter(author=self.request.user)
 
+class ElementAllViewSet(ModelViewSet):
+    queryset = Element.objects.all()
+    serializer_class = ElementSerializer
+    parser_classes = (XMLParser, JSONParser)
+    renderer_classes = (XMLRenderer, JSONRenderer)
+
 class ConcentratedLoadViewSet(ModelViewSet):
     queryset = ConcentratedLoad.objects.all()
     serializer_class = ConcentratedLoadSerializer
