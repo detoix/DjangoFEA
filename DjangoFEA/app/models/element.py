@@ -5,7 +5,7 @@ import math as math
 from app.models import DataItem, Node, Section
 
 class Element(DataItem):
-    guid = models.TextField(unique=True)
+    guid = models.TextField(default="")
     section = models.ForeignKey(Section, on_delete=models.CASCADE, unique=False)
     node_start = models.ForeignKey(Node, on_delete=models.CASCADE, related_name="node_start")
     node_end = models.ForeignKey(Node, on_delete=models.CASCADE, related_name="node_end")
