@@ -67,7 +67,7 @@ class Upload(APIView):
         if serializer.is_valid():
             serializer.save()
 
-            self.delete_redundant_elements(elements)
+            #self.delete_redundant_elements(elements)
                 #.delete_redundant_nodes([x['node_start'] for x in elements] + [x['node_end'] for x in elements])
 
             return Response({"other": 0, "elements": serializer.data}, status=status.HTTP_200_OK)
