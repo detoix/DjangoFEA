@@ -8,7 +8,7 @@ from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 from app.views import home
 from app.models import Node, Section, Element, ConcentratedLoad
-from app.api import NodeViewSet, NodeAllViewSet, SectionViewSet, ElementViewSet, ElementAllViewSet, ConcentratedLoadViewSet, ModelViewSet, DeflectionViewSet, BendingViewSet, ShearViewSet, AxialViewSet
+from app.api import NodeViewSet, NodeAllViewSet, SectionViewSet, ElementViewSet, ElementAllViewSet, Upload, ConcentratedLoadViewSet, ModelViewSet, DeflectionViewSet, BendingViewSet, ShearViewSet, AxialViewSet
 
 admin.autodiscover()
 admin.site.register(Node)
@@ -33,4 +33,5 @@ urlpatterns = [
     url(r'^bending/$', BendingViewSet.as_view()),
     url(r'^shear/$', ShearViewSet.as_view()),
     url(r'^axial/$', AxialViewSet.as_view()),
+    url(r'^data/$', Upload.as_view())
 ] + router.urls

@@ -10,6 +10,10 @@ class Element(DataItem):
     node_end = models.ForeignKey(Node, on_delete=models.CASCADE, related_name="node_end")
     hinge_start = models.BooleanField()
     hinge_end = models.BooleanField()
+    #start_x = models.FloatField()
+    #start_y = models.FloatField()
+    #end_x = models.FloatField()
+    #end_y = models.FloatField()
    
     @property
     def num_of_calc(self):

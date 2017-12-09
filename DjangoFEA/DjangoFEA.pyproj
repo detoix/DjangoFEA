@@ -45,6 +45,9 @@
     <Compile Include="app\models\node.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="app\models\project.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\models\results_provider.py">
       <SubType>Code</SubType>
     </Compile>

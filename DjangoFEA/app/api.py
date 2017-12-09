@@ -2,14 +2,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import serializers
+from rest_framework import serializers, status
 
 from collections import OrderedDict
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from rest_framework_xml.parsers import XMLParser
 from rest_framework_xml.renderers import XMLRenderer
-from app.serializers import NodeSerializer, SectionSerializer, ElementSerializer, ConcentratedLoadSerializer
+from app.serializers import NodeSerializer, SectionSerializer, ElementSerializer, ElementWithNodesSerializer, ConcentratedLoadSerializer
 from app.models import Node, Section, Element, ConcentratedLoad, Solver
 from app.models import VoidResultsProvider, DeflectionResultsProvider, BendingResultsProvider, ShearResultsProvider, AxialResultsProvider
 
@@ -47,9 +47,46 @@ class ElementViewSet(ModelViewSet):
 
 class ElementAllViewSet(ModelViewSet):
     queryset = Element.objects.all()
-    serializer_class = ElementSerializer
+    serializer_class = ElementWithNodesSerializer
     parser_classes = (XMLParser, JSONParser)
     renderer_classes = (XMLRenderer, JSONRenderer)
+
+class Upload(APIView):
+    parser_classes = (XMLParser, JSONParser)
+    renderer_classes = (XMLRenderer, JSONRenderer)
+
+    def get(self, request, format=None):
+        elements = Element.objects.all()
+        serializer = ElementWithNodesSerializer(elements, many=True)
+        return Response({"other": 0, "elements": serializer.data})
+
+    def post(self, request, *args, **kwargs):
+        elements = request.data['elements']
+
+        serializer = ElementWithNodesSerializer(data=elements, many=True)
+        if serializer.is_valid():
+            serializer.save()
+
+            self.delete_redundant_elements(elements)
+                #.delete_redundant_nodes([x['node_start'] for x in elements] + [x['node_end'] for x in elements])
+
+            return Response({"other": 0, "elements": serializer.data}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete_redundant_elements(self, collection):
+        ids = set([x['id'] for x in collection])
+        for x in Element.objects.all():
+            if x.id not in ids:
+                Element.delete(x)
+        return self
+
+    def delete_redundant_nodes(self, collection):
+        #ids = [set([int(x['x']), int(x['y'])]) for x in collection]
+        for x in Node.objects.all():
+            if set([int(x.x), int(x.y)]) not in collection:
+                Node.delete(x)
+        return self
+
 
 class ConcentratedLoadViewSet(ModelViewSet):
     queryset = ConcentratedLoad.objects.all()
