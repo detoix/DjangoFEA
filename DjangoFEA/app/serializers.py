@@ -56,7 +56,7 @@ class ElementWithNodesSerializer(serializers.ModelSerializer):
 
         section = Section.objects.first()
 
-        if validated_data['id'] == -1:
+        if validated_data['id'] == 0:
             element = Element.objects.create(
                 node_start = node_start,
                 node_end = node_end,
