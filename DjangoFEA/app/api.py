@@ -61,20 +61,19 @@ class Upload(APIView):
         return Response({"other": 0, "elements": serializer.data})
 
     def post(self, request, *args, **kwargs):
-        elements = request.data['elements']
-
-        serializer = ElementWithNodesSerializer(data=elements, many=True)
+        serializer = ElementWithNodesSerializer(data=request.data['elements'], many=True)
         if serializer.is_valid():
-            serializer.save()
+            instances = serializer.save()
+            #print(instances)
+            self.delete_redundant_elements(instances)
 
-            #self.delete_redundant_elements(elements)
                 #.delete_redundant_nodes([x['node_start'] for x in elements] + [x['node_end'] for x in elements])
 
             return Response({"other": 0, "elements": serializer.data}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete_redundant_elements(self, collection):
-        ids = set([x['id'] for x in collection])
+        ids = set([x.id for x in collection])
         for x in Element.objects.all():
             if x.id not in ids:
                 Element.delete(x)
